@@ -1,0 +1,66 @@
+# robots.txt pour OREA Santé (https://oreasante.com)
+# Autorise l'exploration des pages publiques par Googlebot et tous les moteurs conformes
+# Interdit strictement l'exploration des espaces privés, authentifiés et données personnelles
+
+User-agent: *
+Allow: /
+Allow: /sante
+Allow: /urgence
+Allow: /medicaments
+Allow: /agenda
+Allow: /tarifs
+Allow: /pricing
+Allow: /symptom-checker
+Allow: /encyclopedie
+Allow: /hydratation
+Allow: /confidentialite
+Allow: /conditions-utilisation
+Allow: /preferences-cookies
+Allow: /orea-logo.png
+Allow: /orea-symbol.svg
+Allow: /orea-logo.svg
+Allow: /orea-logo.jpg
+Allow: /manifest.webmanifest
+Allow: /assets/
+
+# Fichiers de style et scripts nécessaires au rendu CSS/JS des pages publiques
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.woff$
+Allow: /*.woff2$
+
+# Exclusion stricte des espaces privés, données de santé intimes et profils
+Disallow: /mon-orea
+Disallow: /mon-orea/
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /connexion
+Disallow: /connexion/
+Disallow: /inscription
+Disallow: /inscription/
+Disallow: /login
+Disallow: /register
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /payment-pending
+Disallow: /payment-success
+Disallow: /payment-failed
+Disallow: /assistant
+Disallow: /assistant/
+Disallow: /famille
+Disallow: /famille/
+Disallow: /documents
+Disallow: /documents/
+Disallow: /habitudes
+Disallow: /habitudes/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap officiel OREA
+Sitemap: https://oreasante.com/sitemap.xml

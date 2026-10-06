@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OREA Santé — Santé, bien-être, apprentissage, budget et organisation</title>
+    <meta name="description" content="Mieux comprendre, mieux évoluer, mieux vivre. Plateforme humaine, intelligente et évolutive : santé, forme, esprit, études et projets de vie." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://oreasante.com/" />
+    
+    <!-- PWA & Mobile Icons -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0056d6" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="OREA Santé" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/orea-icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="OREA Santé — Santé, bien-être, apprentissage, budget et organisation" />
+    <meta property="og:description" content="Mieux comprendre, mieux évoluer, mieux vivre. Plateforme humaine, intelligente et évolutive : santé, forme, esprit, études et projets de vie." />
+    <meta property="og:image" content="/orea-logo.png" />
+    <meta property="og:url" content="https://oreasante.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="OREA Santé" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="OREA Santé — Santé, bien-être, apprentissage, budget et organisation" />
+    <meta name="twitter:description" content="Mieux comprendre. Mieux vivre. Mieux évoluer. Plateforme humaine, intelligente et évolutive : santé, forme, esprit, études et projets de vie." />
+    <meta name="twitter:image" content="/orea-logo.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <!-- Schema.org JSON-LD Données Structurées Initiales -->
+    <script id="orea-schema-org" type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "OREA",
+        "alternateName": "OREA Santé",
+        "url": "https://oreasante.com",
+        "description": "Plateforme globale d'accompagnement : santé préventive, urgence, armoire à pharmacie, cycle féminin, sport, nutrition africaine, révisions BAC G2 et budget en FCFA.",
+        "inLanguage": "fr-FR",
+        "publisher": {
+          "@type": "Organization",
+          "name": "OREA Santé",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://oreasante.com/orea-logo.png"
+          }
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "OREA Santé",
+        "alternateName": "OREA",
+        "url": "https://oreasante.com",
+        "logo": "https://oreasante.com/orea-logo.png",
+        "founder": {
+          "@type": "Person",
+          "name": "Mr Tsoumou Patrick Bonheur"
+        },
+        "description": "Plateforme d'information, de santé préventive, d'éducation et d'organisation personnelle pour l'Afrique et la francophonie."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "OREA",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "All",
+        "url": "https://oreasante.com",
+        "inLanguage": "fr-FR",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "XAF"
+        }
+      }
+    ]
+    </script>
+  </head>
+  <body class="font-sans antialiased selection:bg-blue-100 selection:text-blue-800">
+    <noscript>
+      <div style="padding: 20px; font-family: sans-serif; background: #f8fafc; color: #1e293b; border-bottom: 2px solid #0056d6;">
+        <h1>OREA Santé — Mieux comprendre. Mieux vivre. Mieux évoluer.</h1>
+        <p>OREA est une plateforme d'information médicale préventive, de bien-être, d'études et de gestion du quotidien. Pour une expérience interactive optimale, veuillez activer JavaScript dans votre navigateur.</p>
+        <ul>
+          <li><a href="/sante">Espace Santé & Prévention</a></li>
+          <li><a href="/urgence">Urgences & Numéros utiles</a></li>
+          <li><a href="/medicaments">Armoire à Pharmacie</a></li>
+          <li><a href="/agenda">Agenda Médical</a></li>
+          <li><a href="/tarifs">Tarifs & Abonnements</a></li>
+          <li><a href="/confidentialite">Politique de Confidentialité</a></li>
+          <li><a href="/conditions-utilisation">Conditions d'Utilisation</a></li>
+        </ul>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

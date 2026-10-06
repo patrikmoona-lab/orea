@@ -1,0 +1,6 @@
+{
+  "name": "OREA Santé",
+  "description": "Mieux comprendre, mieux évoluer, mieux vivre. Plateforme humaine, intelligente et évolutive : santé, forme, esprit, études et projets de vie.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

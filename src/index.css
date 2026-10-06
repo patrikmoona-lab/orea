@@ -1,0 +1,1852 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   OREA UNIVERSAL BUTTON SYSTEM (Futuristic, 3D Inset Depth & Glowing Accent)
+   ========================================================================== */
+
+.orea-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+.orea-btn-wrapper.w-full {
+  display: flex;
+  width: 100%;
+}
+
+.orea-btn {
+  --border-radius: 20px;
+  --padding: 3px;
+  --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --button-color: #0b1528;
+  --highlight-color-hue: 205deg;
+  --text-color: #ffffff;
+
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: solid 1px rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  outline: none;
+  isolation: isolate;
+
+  box-shadow:
+    /* Inset 3D highlights */
+    inset 0px 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0px 2px 2px rgba(255, 255, 255, 0.14),
+    inset 0px 4px 4px rgba(255, 255, 255, 0.08),
+    inset 0px 8px 8px rgba(255, 255, 255, 0.04),
+    /* Deep drops */
+    0px 2px 4px rgba(0, 0, 0, 0.12),
+    0px 4px 8px rgba(0, 0, 0, 0.16),
+    0px 8px 16px rgba(0, 0, 0, 0.18);
+
+  transition:
+    box-shadow var(--transition),
+    border var(--transition),
+    background-color var(--transition),
+    transform 0.18s ease;
+}
+
+/* Outer frame halo */
+.orea-btn::before {
+  content: "";
+  position: absolute;
+  top: calc(0px - var(--padding));
+  left: calc(0px - var(--padding));
+  width: calc(100% + var(--padding) * 2);
+  height: calc(100% + var(--padding) * 2);
+  border-radius: calc(var(--border-radius) + var(--padding));
+  pointer-events: none;
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65));
+  z-index: -1;
+  transition:
+    box-shadow var(--transition),
+    filter var(--transition);
+  box-shadow:
+    0 -8px 8px -6px rgba(0, 0, 0, 0) inset,
+    0 -16px 16px -8px rgba(0, 0, 0, 0) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.12),
+    2px 2px 2px rgba(255, 255, 255, 0.06),
+    -1px -1px 1px rgba(0, 0, 0, 0.2),
+    -2px -2px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Glowing accent gradient */
+.orea-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(
+    0deg,
+    #ffffff,
+    hsl(var(--highlight-color-hue), 100%, 70%),
+    hsla(var(--highlight-color-hue), 100%, 70%, 50%),
+    12%,
+    transparent
+  );
+  background-position: 0 0;
+  opacity: 0;
+  transition:
+    opacity var(--transition),
+    filter var(--transition);
+}
+
+/* Hover State */
+.orea-btn:hover:not(:disabled) {
+  border: solid 1px hsla(var(--highlight-color-hue), 100%, 80%, 0.45);
+  transform: translateY(-1px);
+}
+
+.orea-btn:hover:not(:disabled)::before {
+  box-shadow:
+    0 -8px 8px -6px rgba(255, 255, 255, 0.5) inset,
+    0 -16px 16px -8px hsla(var(--highlight-color-hue), 100%, 70%, 0.3) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.2),
+    2px 2px 2px rgba(255, 255, 255, 0.1),
+    -1px -1px 1px rgba(0, 0, 0, 0.2),
+    -2px -2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.orea-btn:hover:not(:disabled)::after {
+  opacity: 0.9;
+  mask-image: linear-gradient(0deg, #fff, transparent);
+  -webkit-mask-image: linear-gradient(0deg, #fff, transparent);
+}
+
+.orea-btn:hover:not(:disabled) .orea-btn-svg {
+  filter: drop-shadow(0 0 4px hsl(var(--highlight-color-hue), 100%, 70%)) drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.4));
+  transform: scale(1.06);
+}
+
+/* Active State */
+.orea-btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.985);
+  border: solid 1px hsla(var(--highlight-color-hue), 100%, 80%, 0.7);
+  background-color: hsla(var(--highlight-color-hue), 50%, 15%, 0.9);
+}
+
+.orea-btn:active:not(:disabled)::before {
+  box-shadow:
+    0 -8px 12px -6px rgba(255, 255, 255, 0.7) inset,
+    0 -16px 16px -8px hsla(var(--highlight-color-hue), 100%, 70%, 0.8) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.25),
+    2px 2px 2px rgba(255, 255, 255, 0.12),
+    -1px -1px 1px rgba(0, 0, 0, 0.2),
+    -2px -2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.orea-btn:active:not(:disabled)::after {
+  opacity: 1;
+  filter: brightness(180%);
+}
+
+.orea-btn:active:not(:disabled) .orea-btn-letter {
+  text-shadow: 0 0 2px hsla(var(--highlight-color-hue), 100%, 90%, 0.9);
+  animation: none;
+}
+
+/* Focus Visible */
+.orea-btn:focus-visible {
+  outline: 2px solid hsl(var(--highlight-color-hue), 100%, 70%);
+  outline-offset: 3px;
+}
+
+.orea-btn:focus-visible::before {
+  box-shadow:
+    0 -8px 12px -6px rgba(255, 255, 255, 0.3) inset,
+    0 -16px 16px -8px hsla(var(--highlight-color-hue), 100%, 70%, 0.25) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.3),
+    2px 2px 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Disabled State */
+.orea-btn:disabled,
+.orea-btn.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none;
+  filter: grayscale(0.4);
+}
+
+.orea-btn:disabled::before,
+.orea-btn:disabled::after,
+.orea-btn.is-disabled::before,
+.orea-btn.is-disabled::after {
+  display: none;
+}
+
+/* ==========================================================================
+   BUTTON SIZES
+   ========================================================================== */
+
+.orea-btn-xs {
+  --border-radius: 12px;
+  --padding: 2px;
+  font-size: 0.72rem;
+  padding: 0.35rem 0.65rem;
+  gap: 0.35rem;
+}
+
+.orea-btn-sm {
+  --border-radius: 14px;
+  --padding: 2px;
+  font-size: 0.81rem;
+  padding: 0.45rem 0.85rem;
+  gap: 0.45rem;
+}
+
+.orea-btn-md {
+  --border-radius: 18px;
+  --padding: 3px;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.15rem;
+  gap: 0.55rem;
+}
+
+.orea-btn-lg {
+  --border-radius: 22px;
+  --padding: 3px;
+  font-size: 1rem;
+  padding: 0.75rem 1.45rem;
+  gap: 0.65rem;
+}
+
+.orea-btn-xl {
+  --border-radius: 24px;
+  --padding: 4px;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.75rem;
+  gap: 0.75rem;
+}
+
+.orea-btn-icon {
+  --border-radius: 16px;
+  --padding: 2px;
+  padding: 0.55rem;
+  aspect-ratio: 1;
+}
+
+/* ==========================================================================
+   BUTTON VARIANTS (OREA UNIVERSE PALETTES)
+   ========================================================================== */
+
+/* 1. Primary OREA Cyan/Blue */
+.orea-btn-primary {
+  --button-color: #0b1f3a;
+  --highlight-color-hue: 205deg;
+  border-color: rgba(0, 166, 199, 0.35);
+}
+
+/* 2. Secondary Slate */
+.orea-btn-secondary {
+  --button-color: #141e2e;
+  --highlight-color-hue: 215deg;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* 3. Outline Glass */
+.orea-btn-outline {
+  --button-color: rgba(15, 28, 48, 0.75);
+  --highlight-color-hue: 205deg;
+  border-color: rgba(0, 166, 199, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* 4. Ghost */
+.orea-btn-ghost {
+  --button-color: rgba(15, 23, 42, 0.35);
+  --highlight-color-hue: 210deg;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+.orea-btn-ghost::before {
+  display: none;
+}
+
+/* 5. Santé Universe (Deep Medical Blue / Cyan) */
+.orea-btn-sante {
+  --button-color: #082247;
+  --highlight-color-hue: 200deg;
+  border-color: rgba(0, 119, 182, 0.45);
+}
+
+/* 6. SOS / Urgence 24/7 (High-Alert Crimson Red) */
+.orea-btn-urgence,
+.orea-btn-sos,
+.orea-btn-danger {
+  --button-color: #2b0b0e;
+  --highlight-color-hue: 355deg;
+  border-color: rgba(239, 68, 68, 0.55);
+}
+.orea-btn-urgence::before,
+.orea-btn-sos::before {
+  background-image: linear-gradient(0deg, rgba(80, 0, 0, 0.5), rgba(20, 0, 0, 0.8));
+}
+
+/* 7. Sport / Fitness (Vitality Emerald Green) */
+.orea-btn-sport,
+.orea-btn-bien-etre {
+  --button-color: #072619;
+  --highlight-color-hue: 145deg;
+  border-color: rgba(99, 201, 107, 0.45);
+}
+
+/* 8. Nutrition & Terroir (Mint / Teal) */
+.orea-btn-nutrition {
+  --button-color: #062826;
+  --highlight-color-hue: 165deg;
+  border-color: rgba(20, 184, 166, 0.45);
+}
+
+/* 9. Mon Cycle (Rose / Pink) */
+.orea-btn-cycle {
+  --button-color: #2b0d1e;
+  --highlight-color-hue: 330deg;
+  border-color: rgba(236, 72, 153, 0.45);
+}
+
+/* 10. Études / BAC G2 (Royal Indigo / Sapphire) */
+.orea-btn-etude,
+.orea-btn-education {
+  --button-color: #151638;
+  --highlight-color-hue: 250deg;
+  border-color: rgba(99, 102, 241, 0.45);
+}
+
+/* 11. Votre IA (Futuristic Cyan / Sparkle) */
+.orea-btn-ai,
+.orea-btn-votre-ia {
+  --button-color: #081d33;
+  --highlight-color-hue: 190deg;
+  border-color: rgba(6, 182, 212, 0.55);
+}
+
+/* 12. Tarifs / Gold / PRO */
+.orea-btn-pricing,
+.orea-btn-pro,
+.orea-btn-gold {
+  --button-color: #2a2007;
+  --highlight-color-hue: 45deg;
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+/* 13. Success */
+.orea-btn-success {
+  --button-color: #062615;
+  --highlight-color-hue: 150deg;
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* 14. Warning */
+.orea-btn-warning {
+  --button-color: #291804;
+  --highlight-color-hue: 35deg;
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+/* ==========================================================================
+   ANIMATIONS (Letters & Icons)
+   ========================================================================== */
+
+.orea-btn-letter {
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  transition:
+    color var(--transition),
+    text-shadow var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.orea-btn.with-letter-anim .orea-btn-letter {
+  animation: orea-letter-anim 2.6s ease-in-out infinite;
+}
+
+@keyframes orea-letter-anim {
+  0%, 100% {
+    text-shadow: none;
+    opacity: 0.92;
+  }
+  50% {
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 10px hsl(var(--highlight-color-hue), 100%, 75%);
+    color: #ffffff;
+    opacity: 1;
+  }
+}
+
+.orea-btn-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  shrink: 0;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.orea-btn.with-flicker-anim .orea-btn-svg {
+  animation: orea-svg-flicker 2.5s ease-in-out infinite;
+}
+
+@keyframes orea-svg-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+    filter: drop-shadow(0 0 4px hsl(var(--highlight-color-hue), 100%, 70%));
+  }
+}
+
+/* Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  .orea-btn,
+  .orea-btn::before,
+  .orea-btn::after,
+  .orea-btn-letter,
+  .orea-btn-svg {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   OREA UNIVERSAL LOADER SYSTEM (Circular Luminous Rings, Breathing Halo, Letters)
+   ========================================================================== */
+
+.orea-loader-ring-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  isolation: isolate;
+}
+
+/* Outer Glowing Rotating Ring */
+.orea-loader-outer-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 119, 182, 0) 0%,
+    rgba(0, 166, 199, 0.4) 30%,
+    rgba(0, 196, 159, 0.9) 60%,
+    rgba(147, 51, 234, 0.5) 85%,
+    rgba(0, 119, 182, 0) 100%
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #fff calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #fff calc(100% - 3px));
+  animation: orea-spin-smooth 3.2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(0, 166, 199, 0.6));
+}
+
+/* Inner Pulsing Counter-Rotating Ring */
+.orea-loader-inner-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 180deg,
+    transparent 0%,
+    rgba(0, 166, 199, 0.2) 40%,
+    rgba(253, 224, 71, 0.65) 80%,
+    transparent 100%
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #fff calc(100% - 1.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #fff calc(100% - 1.5px));
+  animation: orea-spin-reverse 4.5s linear infinite;
+  opacity: 0.85;
+}
+
+/* Core Halo Breathing Behind Logo */
+.orea-loader-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(0, 166, 199, 0.22) 0%, rgba(0, 119, 182, 0.08) 55%, transparent 75%);
+  animation: orea-halo-breathe 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Animated Letter Stylings */
+.orea-loader-char {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  transition: all 0.3s ease;
+  animation: orea-char-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes orea-spin-smooth {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orea-spin-reverse {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes orea-halo-breathe {
+  0%, 100% {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.16);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 16px rgba(0, 166, 199, 0.45));
+  }
+}
+
+@keyframes orea-char-glow {
+  0%, 100% {
+    opacity: 0.75;
+    transform: translateY(0);
+    text-shadow: none;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+    text-shadow: 0 0 12px rgba(0, 166, 199, 0.8), 0 0 20px rgba(0, 196, 159, 0.4);
+  }
+}
+
+/* OREA Flux Ribbon Animations */
+.orea-flux-ribbon-1 {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: orea-flux-draw 14s ease-in-out infinite alternate;
+}
+
+.orea-flux-ribbon-2 {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: orea-flux-draw 18s ease-in-out infinite alternate 1.5s;
+}
+
+.orea-flux-ribbon-3 {
+  animation: orea-flux-dash 22s linear infinite;
+}
+
+@keyframes orea-flux-draw {
+  0% {
+    stroke-dashoffset: 1200;
+    opacity: 0.3;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 0.85;
+  }
+  100% {
+    stroke-dashoffset: -300;
+    opacity: 0.4;
+  }
+}
+
+@keyframes orea-flux-dash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 360;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orea-loader-outer-ring,
+  .orea-loader-inner-ring,
+  .orea-loader-halo,
+  .orea-loader-char,
+  .orea-flux-ribbon-1,
+  .orea-flux-ribbon-2,
+  .orea-flux-ribbon-3 {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   OREA 3D CUBES LOADING SCREEN
+   ========================================================================== */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #060c18;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-screen.is-loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.wrapper-grid {
+  --animation-duration: 2.1s;
+  --cube-color: #0000;
+  --highlight-color: #00cc44;
+  --cube-width: 48px;
+  --cube-height: 48px;
+  --font-size: 1.8em;
+
+  position: relative;
+  inset: 0;
+
+  display: grid;
+  grid-template-columns: repeat(7, var(--cube-width));
+  grid-template-rows: auto;
+  grid-gap: 0;
+
+  width: calc(7 * var(--cube-width));
+  height: var(--cube-height);
+  perspective: 350px;
+
+  font-family: "Poppins", sans-serif;
+  font-size: var(--font-size);
+  font-weight: 800;
+  color: transparent;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Responsive Cube Sizes */
+@media (max-width: 768px) {
+  .wrapper-grid {
+    --cube-width: 40px;
+    --cube-height: 40px;
+    --font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper-grid {
+    --cube-width: 32px;
+    --cube-height: 32px;
+    --font-size: 1.2em;
+  }
+}
+
+.cube {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: translate-z var(--animation-duration) ease-in-out infinite;
+}
+
+.face {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cube-width);
+  height: var(--cube-height);
+  background-color: var(--cube-color);
+}
+
+.face-left,
+.face-right,
+.face-back,
+.face-front {
+  box-shadow:
+    inset 0 0 2px 1px #0001,
+    inset 0 0 12px 1px #fff1;
+}
+
+.face-front {
+  transform: rotateY(0deg) translateZ(calc(var(--cube-width) / 2));
+}
+
+.face-back {
+  transform: rotateY(180deg) translateZ(calc(var(--cube-width) / 2));
+  opacity: 0.6;
+}
+
+.face-left {
+  transform: rotateY(-90deg) translateZ(calc(var(--cube-width) / 2));
+  opacity: 0.6;
+}
+
+.face-right {
+  transform: rotateY(90deg) translateZ(calc(var(--cube-width) / 2));
+  opacity: 0.6;
+}
+
+.face-top {
+  height: var(--cube-width);
+  transform: rotateX(90deg) translateZ(calc(var(--cube-width) / 2));
+  opacity: 0.8;
+}
+
+.face-bottom {
+  height: var(--cube-width);
+  transform: rotateX(-90deg)
+    translateZ(calc(var(--cube-height) - var(--cube-width) * 0.5));
+  opacity: 0.8;
+}
+
+.cube:nth-child(1) {
+  z-index: 0;
+  animation-delay: 0s;
+}
+.cube:nth-child(2) {
+  z-index: 1;
+  animation-delay: 0.2s;
+}
+.cube:nth-child(3) {
+  z-index: 2;
+  animation-delay: 0.4s;
+}
+.cube:nth-child(4) {
+  z-index: 3;
+  animation-delay: 0.6s;
+}
+.cube:nth-child(5) {
+  z-index: 2;
+  animation-delay: 0.8s;
+}
+.cube:nth-child(6) {
+  z-index: 1;
+  animation-delay: 1s;
+}
+.cube:nth-child(7) {
+  z-index: 0;
+  animation-delay: 1.2s;
+}
+
+.cube .face {
+  animation:
+    face-color var(--animation-duration) ease-in-out infinite,
+    edge-glow var(--animation-duration) ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+.cube .face.face-front {
+  animation:
+    face-color var(--animation-duration) ease-in-out infinite,
+    face-glow var(--animation-duration) ease-in-out infinite,
+    edge-glow var(--animation-duration) ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+@keyframes translate-z {
+  0%,
+  40%,
+  100% {
+    transform: translateZ(-2px);
+  }
+  30% {
+    transform: translateZ(16px) translateY(-1px);
+  }
+}
+
+@keyframes face-color {
+  0%,
+  50%,
+  100% {
+    background-color: var(--cube-color);
+  }
+  10% {
+    background-color: var(--highlight-color);
+  }
+}
+
+@keyframes face-glow {
+  0%,
+  50%,
+  100% {
+    color: #fff0;
+    filter: none;
+  }
+  30% {
+    color: #fff;
+    filter: drop-shadow(0 14px 10px var(--highlight-color));
+  }
+}
+
+@keyframes edge-glow {
+  0%,
+  40%,
+  100% {
+    box-shadow:
+      inset 0 0 2px 1px #0001,
+      inset 0 0 12px 1px #fff1;
+  }
+  30% {
+    box-shadow: 0 0 2px 0px var(--highlight-color);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube,
+  .cube .face,
+  .cube .face.face-front {
+    animation: none !important;
+  }
+  .cube:nth-child(4) .face-front {
+    background-color: var(--highlight-color);
+    box-shadow: 0 0 2px 0px var(--highlight-color);
+  }
+}
+
+/* ==========================================================================
+   MARKDOWN BODY
+   ========================================================================== */
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+  color: #0f2347;
+}
+
+.markdown-body h3 {
+  font-size: 0.95rem;
+}
+
+.markdown-body p {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: #091a33;
+}
+
+/* ==========================================================================
+   OREA LOADER — MODERN CONTINUOUS MOTION SYSTEM
+   Inspired by kinetic progress animation principles tailored to OREA identity
+   ========================================================================== */
+
+/* Fullscreen Overlay Container */
+.orea-loader-screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #f4f8fd 45%, #e9f2fa 100%);
+  color: #0b2f5b;
+  overflow: hidden;
+  user-select: none;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+/* Dark mode variation */
+.orea-loader-screen.dark-theme {
+  background: radial-gradient(circle at 50% 40%, #0c1c38 0%, #071224 55%, #030814 100%);
+  color: #f8fafc;
+}
+
+/* Inline / Component Container */
+.orea-loader-inline {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: transparent;
+  color: #0b2f5b;
+}
+
+/* Loader Center Card */
+.orea-loader-card {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Ambient Radial Glow Backdrop */
+.orea-loader-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(0, 166, 199, 0.18) 0%, rgba(0, 86, 214, 0.08) 50%, transparent 70%);
+  filter: blur(36px);
+  pointer-events: none;
+  animation: orea-ambient-pulse 3.6s ease-in-out infinite;
+}
+
+.dark-theme .orea-loader-ambient-glow {
+  background: radial-gradient(circle, rgba(0, 166, 199, 0.28) 0%, rgba(0, 86, 214, 0.16) 50%, transparent 75%);
+}
+
+/* KINETIC HERO OBJECT — LEVITATING & GLIDING OREA EMBLEM */
+.orea-loader-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.orea-floating-emblem {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: orea-hero-motion 2.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.orea-emblem-ring-outer {
+  position: absolute;
+  inset: -14px;
+  border-radius: 9999px;
+  border: 1.5px dashed rgba(0, 166, 199, 0.35);
+  animation: orea-spin-clockwise 14s linear infinite;
+  pointer-events: none;
+}
+
+.orea-emblem-ring-inner {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(0, 86, 214, 0.5);
+  border-right-color: rgba(0, 196, 159, 0.5);
+  animation: orea-spin-counter 7s linear infinite;
+  pointer-events: none;
+}
+
+.orea-loader-ground {
+  position: relative;
+  width: 200px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.25rem;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+
+.orea-ground-shadow {
+  width: 90px;
+  height: 10px;
+  border-radius: 9999px;
+  background: radial-gradient(ellipse at center, rgba(11, 47, 91, 0.28) 0%, rgba(0, 86, 214, 0.12) 60%, transparent 80%);
+  animation: orea-shadow-breath 2.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.dark-theme .orea-ground-shadow {
+  background: radial-gradient(ellipse at center, rgba(0, 166, 199, 0.45) 0%, rgba(0, 86, 214, 0.2) 60%, transparent 80%);
+}
+
+.orea-track-line {
+  position: absolute;
+  bottom: 3px;
+  width: 170px;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 166, 199, 0.3) 30%, rgba(0, 86, 214, 0.4) 70%, transparent 100%);
+  overflow: hidden;
+}
+
+.orea-track-pulse {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, #00c49f, #ffffff, #00a6c7, transparent);
+  will-change: transform;
+}
+
+.orea-track-pulse-1 {
+  width: 45px;
+  animation: orea-stream-loop 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.orea-track-pulse-2 {
+  width: 35px;
+  animation: orea-stream-loop 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.7s;
+}
+
+.orea-speed-particles {
+  position: absolute;
+  bottom: 6px;
+  width: 150px;
+  height: 8px;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orea-particle-dash {
+  height: 2px;
+  border-radius: 9999px;
+  background-color: #00a6c7;
+  opacity: 0.6;
+  animation: orea-particle-slide 1.2s linear infinite;
+}
+
+.orea-particle-dash:nth-child(1) { width: 14px; animation-delay: 0s; }
+.orea-particle-dash:nth-child(2) { width: 22px; animation-delay: 0.25s; }
+.orea-particle-dash:nth-child(3) { width: 12px; animation-delay: 0.5s; }
+.orea-particle-dash:nth-child(4) { width: 18px; animation-delay: 0.75s; }
+
+.orea-loader-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.orea-loader-wordmark-wrapper {
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.orea-loader-tagline {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #29476d;
+  margin-top: 0.35rem;
+  white-space: nowrap;
+}
+
+.dark-theme .orea-loader-tagline {
+  color: #94a3b8;
+}
+
+.orea-progress-container {
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.orea-progress-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: rgba(11, 47, 91, 0.08);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.dark-theme .orea-progress-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.orea-progress-bar {
+  position: relative;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #0b3b75 0%, #0077b6 40%, #00a6c7 75%, #00c49f 100%);
+  transition: width 0.22s ease-out;
+  box-shadow: 0 0 10px rgba(0, 166, 199, 0.45);
+}
+
+.orea-progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+  animation: orea-progress-shimmer 1.8s ease-in-out infinite;
+}
+
+.orea-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.orea-status-text {
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark-theme .orea-status-text {
+  color: #cbd5e1;
+}
+
+.orea-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #00c49f;
+  animation: orea-dot-ping 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.orea-status-percentage {
+  color: #0077b6;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.dark-theme .orea-status-percentage {
+  color: #38bdf8;
+}
+
+@keyframes orea-hero-motion {
+  0% { transform: translateY(0px) translateX(-2px) rotate(0deg); }
+  25% { transform: translateY(-6px) translateX(1px) rotate(0.6deg); }
+  50% { transform: translateY(-9px) translateX(3px) rotate(0deg); }
+  75% { transform: translateY(-4px) translateX(0px) rotate(-0.5deg); }
+  100% { transform: translateY(0px) translateX(-2px) rotate(0deg); }
+}
+
+@keyframes orea-shadow-breath {
+  0%, 100% { transform: scaleX(1) scaleY(1); opacity: 0.35; }
+  50% { transform: scaleX(0.7) scaleY(0.7); opacity: 0.14; }
+}
+
+@keyframes orea-ambient-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.65; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.95; }
+}
+
+@keyframes orea-spin-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orea-spin-counter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes orea-stream-loop {
+  0% { left: -45px; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { left: 175px; opacity: 0; }
+}
+
+@keyframes orea-particle-slide {
+  0% { transform: translateX(30px); opacity: 0; }
+  25% { opacity: 0.7; }
+  75% { opacity: 0.7; }
+  100% { transform: translateX(-50px); opacity: 0; }
+}
+
+@keyframes orea-progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes orea-dot-ping {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 196, 159, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(0, 196, 159, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 196, 159, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orea-floating-emblem,
+  .orea-ground-shadow,
+  .orea-loader-ambient-glow,
+  .orea-emblem-ring-outer,
+  .orea-emblem-ring-inner,
+  .orea-track-pulse,
+  .orea-particle-dash,
+  .orea-progress-bar::after,
+  .orea-status-dot {
+    animation: none !important;
+  }
+  .orea-floating-emblem {
+    transform: none !important;
+  }
+  .orea-ground-shadow {
+    opacity: 0.3 !important;
+  }
+}
+
+/* ==========================================================================
+   UI UNIVERSE — THEME SWITCH (DAY / NIGHT INTERRUPTEUR)
+   ========================================================================== */
+
+.theme-switch {
+  --toggle-size: 16px;
+  --container-width: 5.625em;
+  --container-height: 2.5em;
+  --container-radius: 6.25em;
+
+  --container-light-bg: #3D7EAE;
+  --container-night-bg: #1D1F2C;
+
+  --circle-container-diameter: 3.375em;
+  --sun-moon-diameter: 2.125em;
+
+  --sun-bg: #ECCA2F;
+  --moon-bg: #C4C9D1;
+  --spot-color: #959DB1;
+
+  --circle-container-offset:
+    calc(
+      (var(--circle-container-diameter) - var(--container-height))
+      / 2 * -1
+    );
+
+  --stars-color: #fff;
+  --clouds-color: #F3FDFF;
+  --back-clouds-color: #AACADF;
+
+  --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
+  --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.theme-switch,
+.theme-switch *,
+.theme-switch *::before,
+.theme-switch *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: var(--toggle-size);
+}
+
+.theme-switch__container {
+  width: var(--container-width);
+  height: var(--container-height);
+  background-color: var(--container-light-bg);
+  border-radius: var(--container-radius);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow:
+    0em -0.062em 0.062em rgba(0,0,0,0.25),
+    0em 0.062em 0.125em rgba(255,255,255,0.94);
+  transition: var(--transition);
+  position: relative;
+}
+
+.theme-switch__container::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  box-shadow:
+    0em 0.05em 0.187em rgba(0,0,0,0.25) inset,
+    0em 0.05em 0.187em rgba(0,0,0,0.25) inset;
+  border-radius: var(--container-radius);
+}
+
+.theme-switch__checkbox {
+  display: none;
+}
+
+.theme-switch__circle-container {
+  width: var(--circle-container-diameter);
+  height: var(--circle-container-diameter);
+  background-color: rgba(255,255,255,0.1);
+  position: absolute;
+  left: var(--circle-container-offset);
+  top: var(--circle-container-offset);
+  border-radius: var(--container-radius);
+  box-shadow:
+    inset 0 0 0 3.375em rgba(255,255,255,0.1),
+    inset 0 0 0 3.375em rgba(255,255,255,0.1),
+    0 0 0 0.625em rgba(255,255,255,0.1),
+    0 0 0 1.25em rgba(255,255,255,0.1);
+  display: flex;
+  transition: var(--circle-transition);
+  pointer-events: none;
+}
+
+.theme-switch__sun-moon-container {
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+  width: var(--sun-moon-diameter);
+  height: var(--sun-moon-diameter);
+  margin: auto;
+  border-radius: var(--container-radius);
+  background-color: var(--sun-bg);
+  box-shadow:
+    0.062em 0.062em 0.062em 0em rgba(254,255,239,0.61) inset,
+    0em -0.062em 0.062em 0em #a1872a inset;
+  filter:
+    drop-shadow(0.062em 0.125em 0.125em rgba(0,0,0,0.25))
+    drop-shadow(0em 0.062em 0.125em rgba(0,0,0,0.25));
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.theme-switch__moon {
+  transform: translateX(100%);
+  width: 100%;
+  height: 100%;
+  background-color: var(--moon-bg);
+  border-radius: inherit;
+  box-shadow:
+    0.062em 0.062em 0.062em 0em rgba(254,255,239,0.61) inset,
+    0em -0.062em 0.062em 0em #969696 inset;
+  transition: var(--transition);
+  position: relative;
+}
+
+.theme-switch__spot {
+  position: absolute;
+  top: 0.75em;
+  left: 0.312em;
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: var(--container-radius);
+  background-color: var(--spot-color);
+  box-shadow:
+    0em 0.0312em 0.062em rgba(0,0,0,0.25) inset;
+}
+
+.theme-switch__spot:nth-of-type(2) {
+  width: 0.375em;
+  height: 0.375em;
+  top: 0.937em;
+  left: 1.375em;
+}
+
+.theme-switch__spot:nth-last-of-type(3) {
+  width: 0.25em;
+  height: 0.25em;
+  top: 0.312em;
+  left: 0.812em;
+}
+
+.theme-switch__clouds {
+  width: 1.25em;
+  height: 1.25em;
+  background-color: var(--clouds-color);
+  border-radius: var(--container-radius);
+  position: absolute;
+  bottom: -0.625em;
+  left: 0.312em;
+  transition: .5s cubic-bezier(0,-0.02,0.4,1.25);
+}
+
+.theme-switch__stars-container {
+  position: absolute;
+  color: var(--stars-color);
+  top: -100%;
+  left: 0.312em;
+  width: 2.75em;
+  height: auto;
+  transition: var(--transition);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container {
+  background-color: var(--container-night-bg);
+}
+
+.theme-switch__checkbox:checked
++ .theme-switch__container
+.theme-switch__circle-container {
+  left:
+    calc(
+      100%
+      - var(--circle-container-offset)
+      - var(--circle-container-diameter)
+    );
+}
+
+.theme-switch__checkbox:checked
++ .theme-switch__container
+.theme-switch__moon {
+  transform: translate(0);
+}
+
+.theme-switch__checkbox:checked
++ .theme-switch__container
+.theme-switch__clouds {
+  bottom: -4.062em;
+}
+
+.theme-switch__checkbox:checked
++ .theme-switch__container
+.theme-switch__stars-container {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ==========================================================================
+   GLOBAL DARK MODE THEME SYSTEM (Harmonious Contrast & Hierarchical Cards)
+   ========================================================================== */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #070d18;
+  color: #f1f5f9;
+}
+
+/* Header in dark mode */
+html.dark header {
+  background-color: rgba(11, 20, 38, 0.95) !important;
+  border-color: rgba(30, 48, 80, 0.8) !important;
+}
+
+/* Base card backgrounds in dark mode */
+html.dark .bg-white {
+  background-color: #0e192d !important;
+  color: #f1f5f9;
+}
+
+html.dark .bg-\[\#f8fbfe\],
+html.dark .bg-slate-50 {
+  background-color: #070d18 !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-200\/80,
+html.dark .border-\[\#e2edf8\] {
+  border-color: rgba(36, 56, 92, 0.6) !important;
+}
+
+html.dark .text-\[\#0f2347\],
+html.dark .text-\[\#1e293b\],
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-400 {
+  color: #64748b !important;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #13223d !important;
+  color: #f1f5f9 !important;
+  border-color: #24385c !important;
+}
+
+/* Accessibility classes */
+html.text-size-large {
+  font-size: 110%;
+}
+
+html.text-size-xlarge {
+  font-size: 122%;
+}
+
+html.high-contrast {
+  filter: contrast(1.25);
+}
+
+html.reduce-motion * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* ==========================================================================
+   OREA AI AVATAR (EVA Character — Uiverse.io by Subaashbala adapted for OREA)
+   ========================================================================== */
+
+.orea-ai-avatar {
+  --orea-avatar-size: 44px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.orea-ai-avatar--xs {
+  --orea-avatar-size: 28px;
+}
+
+.orea-ai-avatar--sm {
+  --orea-avatar-size: 38px;
+}
+
+.orea-ai-avatar--md {
+  --orea-avatar-size: 46px;
+}
+
+.orea-ai-avatar--lg {
+  --orea-avatar-size: 58px;
+}
+
+.orea-ai-avatar--xl {
+  --orea-avatar-size: 84px;
+}
+
+.orea-ai-avatar__viewport {
+  width: var(--orea-avatar-size);
+  height: var(--orea-avatar-size);
+  min-width: var(--orea-avatar-size);
+  min-height: var(--orea-avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  background: radial-gradient(circle at 50% 30%, #0d1e3a 0%, #060e1c 70%, #020710 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  font-size: calc(var(--orea-avatar-size) / 10);
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.orea-ai-avatar--thinking .orea-ai-avatar__viewport {
+  border-color: rgba(56, 189, 248, 0.85);
+  box-shadow:
+    0 0 14px rgba(56, 189, 248, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.orea-ai-avatar--streaming .orea-ai-avatar__viewport {
+  border-color: rgba(52, 211, 153, 0.65);
+  box-shadow:
+    0 0 10px rgba(52, 211, 153, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__viewport {
+  border-color: rgba(248, 113, 113, 0.55);
+}
+
+.orea-ai-avatar__eva {
+  --EVA-ROTATION-DURATION: 4s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  animation: oreaEvaRotateRight var(--EVA-ROTATION-DURATION) linear infinite alternate;
+  margin-top: 0.4em;
+}
+
+.orea-ai-avatar--thinking .orea-ai-avatar__eva {
+  --EVA-ROTATION-DURATION: 1.8s;
+}
+
+.orea-ai-avatar--streaming .orea-ai-avatar__eva {
+  --EVA-ROTATION-DURATION: 2.5s;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__eva {
+  animation: none !important;
+}
+
+.orea-ai-avatar__head {
+  position: relative;
+  width: 3.4em;
+  height: 2.2em;
+  border-radius: 48% 53% 45% 55% / 79% 79% 20% 22%;
+  background: linear-gradient(to right, #ffffff 45%, #cbd5e1);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.orea-ai-avatar__eye-chamber {
+  width: 2.6em;
+  height: 1.5em;
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  border-radius: 45% 53% 45% 48% / 62% 59% 41% 41%;
+  background: linear-gradient(to right, #020617, #0f274a);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.22em;
+  animation: oreaEvaMoveRight var(--EVA-ROTATION-DURATION) linear infinite alternate;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__eye-chamber {
+  animation: none !important;
+}
+
+.orea-ai-avatar__eye {
+  width: 0.65em;
+  height: 0.85em;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #38bdf8, 0 0 8px #38bdf8;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.orea-ai-avatar--thinking .orea-ai-avatar__eye {
+  background: #67e8f9;
+  box-shadow: 0 0 6px #67e8f9, 0 0 12px #38bdf8;
+  animation: oreaEvaEyePulse 1s ease-in-out infinite alternate;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__eye {
+  background: #f87171;
+  box-shadow: 0 0 4px #f87171;
+}
+
+.orea-ai-avatar__body {
+  width: 3.3em;
+  height: 4em;
+  background: linear-gradient(to right bottom, #ffffff 0%, #f8fafc 25%, #94a3b8 75%, #64748b 100%);
+  border-radius: 47% 53% 45% 55% / 12% 9% 90% 88%;
+  position: relative;
+  margin-top: -0.25em;
+  z-index: 1;
+}
+
+.orea-ai-avatar__hand {
+  position: absolute;
+  left: -0.85em;
+  top: 0.35em;
+  width: 1.05em;
+  height: 2.8em;
+  border-radius: 40%;
+  background: linear-gradient(to left, #ffffff 15%, #94a3b8);
+  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.25);
+  transform: rotateY(55deg) rotateZ(10deg);
+  animation: oreaEvaCompensateRotation var(--EVA-ROTATION-DURATION) linear infinite alternate;
+}
+
+.orea-ai-avatar__hand:nth-child(2) {
+  left: auto;
+  right: -0.85em;
+  background: linear-gradient(to right, #ffffff 15%, #94a3b8);
+  transform: rotateY(55deg) rotateZ(-10deg);
+  animation: oreaEvaCompensateRotationRight var(--EVA-ROTATION-DURATION) linear infinite alternate;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__hand {
+  animation: none !important;
+}
+
+.orea-ai-avatar__scanner {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 55%;
+  top: 15%;
+  border-top: 4.5em solid #38bdf8;
+  border-left: 3.2em solid transparent;
+  border-right: 3.2em solid transparent;
+  transform: rotate(30deg);
+  filter: blur(0.5px);
+  opacity: 0.3;
+  pointer-events: none;
+  animation: oreaEvaGlow 2.5s cubic-bezier(0.86, 0, 0.07, 1) infinite;
+}
+
+.orea-ai-avatar--thinking .orea-ai-avatar__scanner {
+  opacity: 0.55;
+  border-top-color: #67e8f9;
+  animation: oreaEvaGlow 1.2s cubic-bezier(0.86, 0, 0.07, 1) infinite;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__scanner {
+  display: none;
+}
+
+.orea-ai-avatar__scanner-origin {
+  position: absolute;
+  width: 0.35em;
+  height: 0.35em;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+  left: 55%;
+  top: 15%;
+}
+
+.orea-ai-avatar--thinking .orea-ai-avatar__scanner-origin {
+  background: #67e8f9;
+  box-shadow: 0 0 8px #67e8f9, 0 0 12px #38bdf8;
+}
+
+.orea-ai-avatar--error .orea-ai-avatar__scanner-origin {
+  background: #f87171;
+  box-shadow: 0 0 4px #f87171;
+}
+
+/* Keyframes */
+@keyframes oreaEvaRotateRight {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(22deg);
+  }
+}
+
+@keyframes oreaEvaMoveRight {
+  from {
+    transform: translate(-50%, -50%);
+  }
+  to {
+    transform: translate(-38%, -50%);
+  }
+}
+
+@keyframes oreaEvaCompensateRotation {
+  from {
+    transform: rotateY(55deg) rotateZ(10deg);
+  }
+  to {
+    transform: rotateY(30deg) rotateZ(10deg);
+  }
+}
+
+@keyframes oreaEvaCompensateRotationRight {
+  from {
+    transform: rotateY(55deg) rotateZ(-10deg);
+  }
+  to {
+    transform: rotateY(70deg) rotateZ(-10deg);
+  }
+}
+
+@keyframes oreaEvaGlow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes oreaEvaEyePulse {
+  0% {
+    transform: scale(0.95);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1.05);
+    filter: brightness(1.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orea-ai-avatar__eva,
+  .orea-ai-avatar__eye-chamber,
+  .orea-ai-avatar__hand,
+  .orea-ai-avatar__scanner,
+  .orea-ai-avatar__eye {
+    animation: none !important;
+  }
+}
+
+
+

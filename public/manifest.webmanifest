@@ -1,0 +1,39 @@
+{
+  "name": "OREA — Santé, Bien-être & Évolution",
+  "short_name": "OREA",
+  "description": "Plateforme globale d'accompagnement : santé préventive, urgence, armoire à pharmacie, cycle féminin, sport, nutrition africaine, révisions BAC G2 et budget en FCFA.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0056d6",
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "categories": ["health", "medical", "lifestyle", "education"],
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/orea-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/orea-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/orea-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

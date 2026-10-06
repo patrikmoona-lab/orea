@@ -1,0 +1,236 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Profil et préférences de l'utilisateur OREA",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "gender": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "country": { "type": "string" },
+        "language": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "provider": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "onboardingCompleted": { "type": "boolean" },
+        "subscription": {
+          "type": "object",
+          "properties": {
+            "planId": { "type": "string" },
+            "billingCycle": { "type": "string", "enum": ["monthly", "yearly"] },
+            "status": { "type": "string", "enum": ["active", "expired", "cancelled", "trialing"] },
+            "startedAt": { "type": "string" },
+            "expiresAt": { "type": "string" },
+            "paymentProvider": { "type": "string" },
+            "lastPaymentId": { "type": "string" }
+          }
+        },
+        "lastLogin": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "email"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Historique des paiements et transactions d'abonnements OREA",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userName": { "type": "string" },
+        "planId": { "type": "string" },
+        "billingCycle": { "type": "string", "enum": ["monthly", "yearly"] },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "provider": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "processing", "successful", "failed", "cancelled", "expired"] },
+        "transactionReference": { "type": "string" },
+        "failureReason": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "planId", "billingCycle", "amount", "currency", "provider", "status", "createdAt", "updatedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Conversation individuelle avec l'assistant OREA",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "userId": { "type": "string" },
+        "messageCount": { "type": "number" },
+        "isArchived": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "lastMessageSnippet": { "type": "string" }
+      },
+      "required": ["id", "title", "userId", "messageCount", "createdAt", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Message individuel dans une conversation OREA",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "messageId": { "type": "string" },
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant", "system"] },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["conversationId", "messageId", "userId", "role", "content", "createdAt"]
+    },
+    "UserModule": {
+      "title": "UserModule",
+      "description": "Données et état de configuration d'un module OREA pour l'utilisateur",
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "data": { "type": "object" }
+      },
+      "required": ["enabled", "createdAt", "updatedAt"]
+    },
+    "FitnessProfile": {
+      "title": "FitnessProfile",
+      "description": "Profil de personnalisation physique OREA ÉNERGIE",
+      "type": "object",
+      "properties": {
+        "level": { "type": "string" },
+        "bodyParts": { "type": "array", "items": { "type": "string" } },
+        "goals": { "type": "array", "items": { "type": "string" } },
+        "duration": { "type": "string" },
+        "frequency": { "type": "string" },
+        "equipment": { "type": "array", "items": { "type": "string" } },
+        "limitations": { "type": "string" },
+        "onboardingCompleted": { "type": "boolean" },
+        "completedAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["level", "bodyParts", "goals", "duration", "frequency", "equipment", "onboardingCompleted", "completedAt", "updatedAt"]
+    },
+    "WorkoutSession": {
+      "title": "WorkoutSession",
+      "description": "Historique des séances d'entraînement complétées dans OREA ÉNERGIE",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "sessionTitle": { "type": "string" },
+        "level": { "type": "string" },
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "durationMinutes": { "type": "number" },
+        "exercisesCompletedCount": { "type": "number" },
+        "totalSetsCompleted": { "type": "number" },
+        "exerciseIds": { "type": "array", "items": { "type": "string" } },
+        "completedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "sessionTitle", "level", "categories", "durationMinutes", "completedAt"]
+    },
+    "ContentTip": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "subcategory": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "source": { "type": "string" },
+        "sourceUrl": { "type": "string" },
+        "verificationDate": { "type": "string" },
+        "reliability": { "type": "string", "enum": ["verifie", "en_attente", "archive"] },
+        "level": { "type": "string", "enum": ["debutant", "intermediaire", "avance"] },
+        "status": { "type": "string", "enum": ["publie", "brouillon", "archive"] },
+        "featured": { "type": "boolean" },
+        "viewsCount": { "type": "number" },
+        "medicalDisclaimer": { "type": "boolean" },
+        "financialDisclaimer": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "content", "category", "source", "reliability", "status", "createdAt", "updatedAt"]
+    },
+    "ContentVideo": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "youtubeUrl": { "type": "string" },
+        "youtubeVideoId": { "type": "string" },
+        "channelTitle": { "type": "string" },
+        "category": { "type": "string" },
+        "subcategory": { "type": "string" },
+        "duration": { "type": "string" },
+        "language": { "type": "string" },
+        "level": { "type": "string", "enum": ["debutant", "intermediaire", "avance"] },
+        "status": { "type": "string", "enum": ["publie", "brouillon", "archive"] },
+        "featured": { "type": "boolean" },
+        "viewsCount": { "type": "number" },
+        "verifiedPublic": { "type": "boolean" },
+        "embedUrl": { "type": "string" },
+        "medicalDisclaimer": { "type": "boolean" },
+        "financialDisclaimer": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "youtubeUrl", "youtubeVideoId", "channelTitle", "category", "duration", "language", "status", "verifiedPublic", "embedUrl", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Profil privé de l'utilisateur"
+    },
+    "/users/{userId}/modules/{moduleId}": {
+      "schema": "UserModule",
+      "description": "Données et configuration spécifique pour l'un des 6 modules OREA"
+    },
+    "/users/{userId}/fitnessProfile/profile": {
+      "schema": "FitnessProfile",
+      "description": "Profil de personnalisation physique et de niveau OREA ÉNERGIE"
+    },
+    "/users/{userId}/workoutSessions/{sessionId}": {
+      "schema": "WorkoutSession",
+      "description": "Historique des séances d'entraînement complétées par l'utilisateur"
+    },
+    "/users/{userId}/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Collection des conversations privées de l'utilisateur"
+    },
+    "/users/{userId}/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages chronologiques d'une conversation"
+    },
+    "/assistantConversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Conversations OREA indexées"
+    },
+    "/assistantConversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages sous les conversations OREA"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Transactions et paiements sécurisés d'abonnements"
+    },
+    "/content/tips/items/{tipId}": {
+      "schema": "ContentTip",
+      "description": "Conseils et contenus pédagogiques administrés OREA"
+    },
+    "/content/videos/items/{videoId}": {
+      "schema": "ContentVideo",
+      "description": "Bibliothèque de vidéos YouTube pédagogiques vérifiées OREA"
+    }
+  }
+}

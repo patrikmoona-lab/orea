@@ -1,0 +1,1385 @@
+import {
+  HealthCardItem,
+  ValueBarItem,
+  HealthResource,
+  SymptomTopic,
+  EmergencyFacility,
+  MedicationInfo,
+  MedicationReminder,
+  AgendaEvent,
+} from './types';
+
+export const VALUE_BAR_ITEMS: ValueBarItem[] = [
+  {
+    id: 'val-1',
+    title: 'Informations fiables',
+    subtitle: 'Des contenus validés et à jour',
+    iconType: 'shield',
+  },
+  {
+    id: 'val-2',
+    title: 'Prévention',
+    subtitle: 'Des conseils pour éviter et anticiper',
+    iconType: 'sprout',
+  },
+  {
+    id: 'val-3',
+    title: 'Conseils pratiques',
+    subtitle: 'Des actions simples pour votre bien-être',
+    iconType: 'heart',
+  },
+  {
+    id: 'val-4',
+    title: 'Ressources santé',
+    subtitle: 'Guides, articles et outils accessibles à tous',
+    iconType: 'book',
+  },
+];
+
+// The 4 main OREA Universes on the home page
+export interface UniverseCardData {
+  id: 'sante' | 'urgence' | 'medicaments' | 'agenda';
+  title: string;
+  badge: string;
+  description: string;
+  buttonText: string;
+  iconType: 'sante' | 'urgence' | 'medicaments' | 'agenda';
+  isEmergency?: boolean;
+}
+
+export const OREA_UNIVERSES: UniverseCardData[] = [
+  {
+    id: 'sante',
+    title: 'OREA Santé',
+    badge: 'Comprendre & Prévenir',
+    description: 'Informations de santé, symptômes, prévention et conseils fiables pour toute la famille.',
+    buttonText: 'Explorer',
+    iconType: 'sante',
+  },
+  {
+    id: 'urgence',
+    title: 'OREA Urgence',
+    badge: 'Accès Rapide',
+    description: 'Trouvez rapidement urgences, hôpitaux, pharmacies et centres de santé à proximité.',
+    buttonText: 'Trouver de l’aide',
+    iconType: 'urgence',
+    isEmergency: true,
+  },
+  {
+    id: 'medicaments',
+    title: 'OREA Médicaments',
+    badge: 'Usage & Rappels',
+    description: 'Recherchez un médicament, comprenez son usage et gérez vos rappels personnels.',
+    buttonText: 'Rechercher',
+    iconType: 'medicaments',
+  },
+  {
+    id: 'agenda',
+    title: 'OREA Agenda Santé',
+    badge: 'Organisation',
+    description: 'Organisez vos rendez-vous, examens, vaccinations et rappels de santé en toute simplicité.',
+    buttonText: 'Ouvrir mon agenda',
+    iconType: 'agenda',
+  },
+];
+
+// 12 Health Categories for OREA Santé
+export interface SanteCategory {
+  id: string;
+  name: string;
+  iconName: string;
+  description: string;
+  topicsCount: number;
+}
+
+export const OREA_SANTE_12_CATEGORIES: SanteCategory[] = [
+  {
+    id: 'symptomes',
+    name: 'Symptômes',
+    iconName: 'Activity',
+    description: 'Comprendre vos signes, leur évolution et quand consulter.',
+    topicsCount: 14,
+  },
+  {
+    id: 'prevention',
+    name: 'Prévention',
+    iconName: 'ShieldCheck',
+    description: 'Dépistages, bilans annuels et gestes protecteurs.',
+    topicsCount: 12,
+  },
+  {
+    id: 'nutrition',
+    name: 'Nutrition',
+    iconName: 'Apple',
+    description: 'Alimentation équilibrée, hydratation et santé métabolique.',
+    topicsCount: 10,
+  },
+  {
+    id: 'sommeil',
+    name: 'Sommeil',
+    iconName: 'Moon',
+    description: 'Rythmes circadiens, insomnies et hygiène du repos.',
+    topicsCount: 8,
+  },
+  {
+    id: 'sport',
+    name: 'Sport & activité',
+    iconName: 'Footprints',
+    description: 'Bienfaits du mouvement quotidien et reprise sécurisée.',
+    topicsCount: 9,
+  },
+  {
+    id: 'mentale',
+    name: 'Santé mentale',
+    iconName: 'Brain',
+    description: 'Gestion du stress, anxiété, sommeil et équilibre émotionnel.',
+    topicsCount: 11,
+  },
+  {
+    id: 'femme',
+    name: 'Santé de la femme',
+    iconName: 'HeartHandshake',
+    description: 'Suivi gynécologique, maternité, dépistage et ménopause.',
+    topicsCount: 8,
+  },
+  {
+    id: 'enfant',
+    name: 'Santé de l’enfant',
+    iconName: 'Baby',
+    description: 'Croissance, vaccinations infantiles et affections courantes.',
+    topicsCount: 7,
+  },
+  {
+    id: 'digestive',
+    name: 'Santé digestive',
+    iconName: 'UtensilsCrossed',
+    description: 'Transit, microbiote, reflux et confort gastro-intestinal.',
+    topicsCount: 9,
+  },
+  {
+    id: 'respiratoire',
+    name: 'Santé respiratoire',
+    iconName: 'Wind',
+    description: 'Allergies respiratoires, asthme, toux et oxygénation.',
+    topicsCount: 8,
+  },
+  {
+    id: 'cardiovasculaire',
+    name: 'Santé cardiovasculaire',
+    iconName: 'HeartPulse',
+    description: 'Tension artérielle, cholestérol et protection du cœur.',
+    topicsCount: 10,
+  },
+  {
+    id: 'hygiene',
+    name: 'Hygiène & environnement',
+    iconName: 'Sparkles',
+    description: 'Lavage des mains, qualité de l’air et prévention des infections.',
+    topicsCount: 6,
+  },
+];
+
+export const HEALTH_CARDS: HealthCardItem[] = [
+  {
+    id: 'symptomes',
+    title: 'Symptômes',
+    description: 'Comprendre vos signes et réactions',
+    isHighlighted: false,
+    details: {
+      tagline: 'Identifier, comprendre et réagir aux signaux de votre corps',
+      overview: 'Un symptôme est une réaction naturelle du corps. OREA Santé vous aide à décoder vos sensations sans dramatiser, en identifiant les signes d’alerte et les démarches adaptées.',
+      keyPoints: [
+        'Comprendre la différence entre symptôme aigu et chronique',
+        'Noter la fréquence, l’intensité et l’évolution dans le temps',
+        'Savoir quand privilégier l’automédication responsable ou la consultation',
+        'Repérer immédiatement les signaux d’urgence vitale',
+      ],
+      practicalTips: [
+        'Tenez un carnet de symptômes : heure d’apparition, facteurs déclenchants et intensité de 1 à 10.',
+        'Évitez l’automédication par antibiotiques sans prescription médicale formelle.',
+        'Hydratez-vous abondamment et reposez votre organisme dès l’apparition d’une fièvre modérée.',
+      ],
+      warningSigns: [
+        'Difficulté respiratoire soudaine ou sensation d’oppression thoracique',
+        'Fièvre élevée persistant plus de 48 heures sans amélioration',
+        'Perte de conscience, confusion brutale ou déficit moteur',
+      ],
+    },
+  },
+  {
+    id: 'prevention',
+    title: 'Prévention',
+    description: 'Anticiper et adopter les bons réflexes',
+    isHighlighted: true,
+    details: {
+      tagline: 'Agir aujourd’hui pour préserver votre capital santé demain',
+      overview: 'La prévention est le pilier fondamental de la santé durable. Grâce à des bilans réguliers, des vaccinations actualisées et une hygiène de vie protectrice, vous réduisez drastiquement le risque de maladies chroniques.',
+      keyPoints: [
+        'Calendrier vaccinal pour toute la famille (nourrissons, adultes et seniors)',
+        'Dépistages réguliers : tension artérielle, glycémie, bilans visuels et dentaires',
+        'Prévention cardiovasculaire : surveillance du cholestérol et de l’IMC',
+        'Hygiène environnementale : qualité de l’air intérieur, gestes barrières et ergonomie',
+      ],
+      practicalTips: [
+        'Programmez un bilan de santé annuel même en l’absence de tout symptôme.',
+        'Mesurez votre pression artérielle au calme au moins une fois par an dès 30 ans.',
+        'Vérifiez la mise à jour de vos rappels vaccinaux (DTP, grippe, coqueluche).',
+      ],
+      warningSigns: [
+        'Antécédents familiaux de diabète ou d’accidents cardiovasculaires précoces',
+        'Essoufflement anormal à l’effort modéré de la vie courante',
+      ],
+    },
+  },
+  {
+    id: 'nutrition',
+    title: 'Nutrition',
+    description: 'Bien manger pour rester en bonne santé',
+    isHighlighted: false,
+    details: {
+      tagline: 'Nourrir son corps avec équilibre, plaisir et vitalité',
+      overview: 'Une alimentation équilibrée renforce le système immunitaire, protège le microbiote intestinal et prévient les affections métaboliques comme le diabète de type 2.',
+      keyPoints: [
+        'Assiette équilibrée : 50% végétaux, 25% protéines de qualité, 25% féculents complets',
+        'Hydratation continue : 1,5 à 2 litres d’eau pure par jour',
+        'Réduction des produits ultra-transformés riches en sucres raffinés et sel caché',
+        'Privilégier les bonnes graisses (acides gras oméga-3, huile d’olive, oléagineux)',
+      ],
+      practicalTips: [
+        'Composez chaque repas principal avec au moins deux couleurs de légumes différents.',
+        'Remplacez les boissons sucrées par des infusions sans sucre ou de l’eau citronnée.',
+        'Mangez lentement en mastiquant au moins 20 minutes pour favoriser la satiété.',
+      ],
+      warningSigns: [
+        'Perte d’appétit inexpliquée prolongée ou amaigrissement rapide sans régime',
+        'Troubles de déglutition persistants',
+      ],
+    },
+  },
+  {
+    id: 'sommeil',
+    title: 'Sommeil',
+    description: 'Améliorer la qualité de votre sommeil',
+    isHighlighted: false,
+    details: {
+      tagline: 'Le repos réparateur au service de la régénération cellulaire',
+      overview: 'Le sommeil est indispensable à la consolidation de la mémoire, à la régulation hormonale et à l’efficacité des défenses immunitaires.',
+      keyPoints: [
+        'Respect des cycles de sommeil d’environ 90 minutes',
+        'Température de la chambre optimale comprise entre 18°C et 19°C',
+        'Suppression de l’exposition aux écrans bleus 1h30 avant l’endormissement',
+        'Horaires de réveil et de coucher stables, même le week-end',
+      ],
+      practicalTips: [
+        'Exposez-vous à la lumière naturelle du jour dès votre réveil matinal pendant 15 minutes.',
+        'Évitez les dîners trop riches et lourds avant de vous coucher.',
+        'Pratiquez des étirements doux ou une séance de respiration apaisante.',
+      ],
+      warningSigns: [
+        'Ronflements sonores associés à des pauses respiratoires (suspicion d’apnée)',
+        'Somnolence diurne incontrôlable au volant ou au travail',
+      ],
+    },
+  },
+  {
+    id: 'sport',
+    title: 'Sport & activité',
+    description: 'Bouger chaque jour pour votre bien-être',
+    isHighlighted: false,
+    details: {
+      tagline: 'L’activité physique comme médicament naturel et accessible',
+      overview: 'Bouger régulièrement réduit le risque d’hypertension, améliore la qualité osseuse et agit directement sur la production d’endorphines.',
+      keyPoints: [
+        'Objectif OMS : 150 à 300 minutes d’intensité modérée par semaine',
+        'Rompre la sédentarité assise toutes les 60 à 90 minutes',
+        'Renforcement musculaire doux deux fois par semaine',
+        'Échauffement systématique et récupération hydrique',
+      ],
+      practicalTips: [
+        'Privilégiez les escaliers plutôt que l’ascenseur au quotidien.',
+        'Descendez un arrêt de transport plus tôt pour marcher 15 minutes de plus.',
+        'Écoutez vos signaux articulaires sans forcer au-delà du seuil de douleur.',
+      ],
+      warningSigns: [
+        'Douleur constrictive dans la poitrine à l’effort (arrêt immédiat)',
+        'Vertiges intenses ou palpitations inhabituelles pendant l’exercice',
+      ],
+    },
+  },
+  {
+    id: 'mentale',
+    title: 'Santé mentale',
+    description: 'Prendre soin de votre équilibre émotionnel',
+    isHighlighted: false,
+    details: {
+      tagline: 'Cultiver la sérénité et déconstruire les tabous du bien-être psychologique',
+      overview: 'La santé mentale fait partie intégrante de la santé globale. Prendre soin de son esprit permet de mieux surmonter les aléas de la vie quotidienne.',
+      keyPoints: [
+        'Identifier le stress chronique et ses manifestations corporelles',
+        'Maintenir des liens sociaux bienveillants et protecteurs',
+        'Pratiquer des exercices de cohérence cardiaque et de pleine conscience',
+        'Consulter un professionnel sans attendre l’épuisement',
+      ],
+      practicalTips: [
+        'Accordez-vous 10 minutes de déconnexion numérique totale chaque jour.',
+        'Parlez de vos difficultés à un proche de confiance ou à un médecin traitant.',
+        'La cohérence cardiaque (5 secondes inspiration, 5 secondes expiration) apaise le système nerveux.',
+      ],
+      warningSigns: [
+        'Tristesse profonde, angoisse permanente ou perte totale d’intérêt depuis plus de deux semaines',
+        'Idées noires persistantes (appelez immédiatement le 3114, gratuit et 24/7)',
+      ],
+    },
+  },
+];
+
+export const HEALTH_RESOURCES: HealthResource[] = [
+  {
+    id: 'res-1',
+    title: 'SAMU & Urgences Médicales',
+    category: 'Secours d’urgence vitale',
+    phone: '15',
+    description: 'Service d’aide médicale urgente disponible 24h/24 et 7j/7 pour toute détresse vitale.',
+    availableHours: '24h/24 - 7j/7',
+    badge: 'Urgence',
+  },
+  {
+    id: 'res-2',
+    title: 'Numéro d’urgence européen',
+    category: 'Secours d’urgence tous pays UE',
+    phone: '112',
+    description: 'Accessible gratuitement depuis un fixe ou un mobile dans toute l’Union européenne.',
+    availableHours: '24h/24 - 7j/7',
+    badge: 'Europe',
+  },
+  {
+    id: 'res-3',
+    title: 'Numéro national de prévention du suicide',
+    category: 'Soutien psychologique & écoute',
+    phone: '31 14',
+    description: 'Ligne gratuite, anonyme et confidentielle animée par des professionnels de santé.',
+    availableHours: '24h/24 - 7j/7',
+    badge: 'Écoute 24/7',
+  },
+  {
+    id: 'res-4',
+    title: 'Pharmacies de garde & Nuit',
+    category: 'Permanence des soins',
+    phone: '32 37',
+    description: 'Localisation de la pharmacie de garde la plus proche pour obtenir vos traitements urgents.',
+    availableHours: 'Nuits et dimanches',
+    badge: 'Pharmacie',
+  },
+  {
+    id: 'res-5',
+    title: 'Fil Santé Jeunes & Familles',
+    category: 'Écoute & orientation',
+    phone: '0 800 235 236',
+    description: 'Ligne d’écoute gratuite et anonyme sur la santé globale, le bien-être et la prévention.',
+    availableHours: '9h - 23h tous les jours',
+    badge: 'Conseils',
+  },
+  {
+    id: 'res-6',
+    title: 'Annuaire des Centres de Santé OREA',
+    category: 'Réseau de soins de proximité',
+    description: 'Trouvez une maison de santé pluriprofessionnelle, un dispensaire ou un centre médical partenaire.',
+    availableHours: 'Prise de rendez-vous en ligne',
+    badge: 'Orientation',
+  },
+];
+
+// Rich topics for OREA Santé search & exploration
+export const SEARCHABLE_TOPICS: SymptomTopic[] = [
+  {
+    id: 'top-1',
+    name: 'Maux de tête (Céphalées & Migraine)',
+    category: 'Symptômes',
+    severity: 'benign',
+    summary: 'Ce symptôme peut avoir plusieurs causes : tension nerveuse, déshydratation, fatigue oculaire, manque de sommeil ou crise migraineuse.',
+    causes: [
+      'Tension musculaire du cou et des épaules',
+      'Déshydratation ou repas sauté',
+      'Fatigue oculaire prolongée devant les écrans',
+      'Épisode migraineux avec sensibilité à la lumière ou au bruit',
+      'Variation hormonale ou sevrage caféique',
+    ],
+    recommendations: [
+      'S’isoler dans une pièce sombre, fraîche et silencieuse',
+      'Boire un grand verre d’eau fraîche immédiatement',
+      'Appliquer une compresse fraîche sur le front et les tempes',
+      'Pratiquer des étirements doux des trapèzes et du cou',
+      'Envisager un antalgique de niveau 1 (paracétamol) si nécessaire et sans contre-indication',
+    ],
+    prevention: [
+      'Maintenir une hydratation régulière de 1,5L d’eau par jour',
+      'Faire des pauses visuelles (règle des 20-20-20 : regarder au loin toutes les 20 min)',
+      'Conserver des heures de coucher et de lever régulières',
+    ],
+    whenToConsult: 'Consulter un médecin si les maux de tête deviennent fréquents (plus de 2 fois par semaine), résistent aux antalgiques habituels ou modifient leurs caractéristiques.',
+    urgentSigns: [
+      'Apparition brutale et foudroyante ("en coup de tonnerre")',
+      'Fièvre associée avec raideur de la nuque',
+      'Troubles de la vision, de la parole ou faiblesse d’un côté du corps (appelez le 15)',
+      'Apparition suite à un traumatisme crânien récent',
+    ],
+  },
+  {
+    id: 'top-2',
+    name: 'Fièvre chez l’adulte',
+    category: 'Symptômes',
+    severity: 'moderate',
+    summary: 'La fièvre est une réaction de défense naturelle et bénéfique de l’organisme face à une agression virale ou bactérienne. Elle stimule le système immunitaire.',
+    causes: [
+      'Infection virale respiratoire (syndrome grippal, rhinopharyngite)',
+      'Infection digestive (gastro-entérite)',
+      'Infection urinaire ou cutanée',
+      'Coup de chaleur ou insolation',
+    ],
+    recommendations: [
+      'Mesurer la température au repos avec un thermomètre fiable',
+      'Boire abondamment (eau, bouillons, tisanes tièdes) pour compenser les pertes sudorales',
+      'Ne pas trop se couvrir pour permettre à la chaleur de s’évacuer, sans frissonner',
+      'Prendre du paracétamol en respectant les posologies (max 1g par prise, espacées de 6h, max 3g/jour chez l’adulte)',
+    ],
+    prevention: [
+      'Lavage régulier des mains à l’eau et au savon',
+      'Vaccination annuelle contre la grippe pour les personnes à risque',
+      'Aération des pièces 10 minutes deux fois par jour',
+    ],
+    whenToConsult: 'Consulter si la fièvre dépasse 38,5°C pendant plus de 48 à 72 heures, ou si elle réapparaît après une période d’accalmie.',
+    urgentSigns: [
+      'Difficultés respiratoires, essoufflement marqué ou lèvres bleutées',
+      'Confusion mentale, somnolence excessive ou propos incohérents',
+      'Apparition de taches rouges ou pourpres sur la peau qui ne s’effacent pas à la pression (purpura)',
+    ],
+  },
+  {
+    id: 'top-3',
+    name: 'Toux aiguë (sèche ou grasse)',
+    category: 'Santé respiratoire',
+    severity: 'benign',
+    summary: 'La toux est un réflexe protecteur indispensable permettant d’expulser les sécrétions et corps étrangers encombrant les voies respiratoires.',
+    causes: [
+      'Irritation virale des voies aériennes supérieures (rhume, trachéite)',
+      'Écoulement nasal postérieur',
+      'Atmosphère sèche ou exposition à la fumée de tabac et polluants',
+      'Reflux gastro-œsophagien (toux nocturne caractéristique)',
+    ],
+    recommendations: [
+      'Humidifier l’air de la chambre à coucher (idéalement 50-60% d’humidité)',
+      'Consommer une cuillère de miel avant le coucher (adulte et enfant de plus de 1 an)',
+      'Effectuer des lavages nasaux au sérum physiologique',
+      'Surélever légèrement la tête de lit avec un oreiller supplémentaire',
+    ],
+    prevention: [
+      'Éviter le tabagisme actif et passif',
+      'Maintenir une température modérée dans la chambre (19°C maximum)',
+    ],
+    whenToConsult: 'Consulter si la toux persiste plus de 3 semaines, perturbe le sommeil ou s’accompagne d’une fatigue marquée.',
+    urgentSigns: [
+      'Présence de sang dans les expectorations',
+      'Sifflement aigu ou difficulté inspiratoire majeure (détresse respiratoire)',
+      'Douleur aiguë dans la poitrine lors de la respiration',
+    ],
+  },
+  {
+    id: 'top-4',
+    name: 'Brûlures d’estomac & reflux (RGO)',
+    category: 'Santé digestive',
+    severity: 'benign',
+    summary: 'Sensation de remontée acide désagréable depuis l’estomac vers l’œsophage et la gorge, fréquente après les repas copieux ou en position allongée.',
+    causes: [
+      'Relâchement transitoire du sphincter inférieur de l’œsophage',
+      'Repas trop gras, épicés, café, alcool ou chocolat',
+      'Pression abdominale accrue (surpoids, vêtements serrés, grossesse)',
+      'Position couchée trop précoce après le repas',
+    ],
+    recommendations: [
+      'Fractionner les repas en portions plus modérées',
+      'Attendre au moins 2 heures après le dîner avant de se coucher',
+      'Surélever la tête du lit de 10 à 15 cm',
+      'Limiter les aliments déclencheurs (boissons gazeuses, agrumes, tomates cuites)',
+    ],
+    prevention: [
+      'Maintenir un poids de forme',
+      'Arrêter le tabac, qui favorise l’acidité gastrique',
+      'Manger lentement dans un climat calme',
+    ],
+    whenToConsult: 'Consulter si les brûlures surviennent plus de deux fois par semaine ou si elles résistent aux conseils hygiéno-diététiques.',
+    urgentSigns: [
+      'Difficulté ou blocage douloureux lors de la déglutition (dysphagie)',
+      'Vomissements contenant du sang ou selles noires d’aspect goudronneux',
+      'Douleur thoracique irradiant dans la mâchoire ou le bras gauche (urgences 15)',
+    ],
+  },
+  {
+    id: 'top-5',
+    name: 'Troubles de l’endormissement & insomnie',
+    category: 'Sommeil',
+    severity: 'benign',
+    summary: 'Difficulté à trouver le sommeil ou réveils nocturnes prolongés altérant la récupération physique et psychologique.',
+    causes: [
+      'Stress professionnel ou familial',
+      'Exposition prolongée à la lumière bleue des écrans avant le coucher',
+      'Consommation tardive de caféine, théine ou alcool',
+      'Rythmes de vie irréguliers ou chambre surchauffée',
+    ],
+    recommendations: [
+      'Couper tous les écrans au moins 60 minutes avant le sommeil',
+      'Pratiquer une activité calme (lecture papier, musique douce, relaxation)',
+      'Garder une chambre aérée à 18°C dans l’obscurité complète',
+      'Si le sommeil ne vient pas après 25 minutes, se lever et lire au calme sur un fauteuil',
+    ],
+    prevention: [
+      'Pratiquer une activité physique en journée, idéalement avant 18 heures',
+      'S’exposer à la lumière du soleil le matin pour synchroniser l’horloge biologique',
+    ],
+    whenToConsult: 'Consulter votre médecin si l’insomnie dure depuis plus d’un mois et altère votre vigilance en journée.',
+    urgentSigns: [
+      'Somnolence diurne incontrôlable provoquant des micro-endormissements au volant',
+      'Angoisse nocturne majeure avec tachycardie intense persistante',
+    ],
+  },
+  {
+    id: 'top-6',
+    name: 'Hypertension artérielle (Prévention & suivi)',
+    category: 'Santé cardiovasculaire',
+    severity: 'moderate',
+    summary: 'Pression anormalement élevée du sang dans les artères. Souvent asymptomatique ("tueur silencieux"), elle nécessite un dépistage systématique.',
+    causes: [
+      'Facteurs génétiques et hérédité',
+      'Consommation excessive de sel alimentaire',
+      'Sédentarité et manque d’exercice régulier',
+      'Surpoids, stress chronique et consommation d’alcool/tabac',
+    ],
+    recommendations: [
+      'Mesurer sa tension au repos avec un tensiomètre validé (règle des 3 mesures)',
+      'Réduire l’apport en sel à moins de 5g par jour',
+      'Adopter le régime DASH : riche en fruits, légumes, céréales complètes et potassium',
+      'Pratiquer au moins 30 minutes de marche rapide quotidienne',
+    ],
+    prevention: [
+      'Faire mesurer sa pression artérielle au moins une fois par an dès 30 ans',
+      'Limiter les excitants et l’alcool',
+    ],
+    whenToConsult: 'Consulter pour tout bilan tensionnel régulier ou confirmation d’un chiffre supérieur à 140/90 mmHg au cabinet ou 135/85 mmHg en automesure.',
+    urgentSigns: [
+      'Pression artérielle supérieure à 180/110 mmHg avec maux de tête intenses',
+      'Troubles visuels soudains ("mouches volantes"), bourdonnements d’oreilles',
+      'Douleur thoracique ou essoufflement aigu (Urgences 15)',
+    ],
+  },
+];
+
+// OREA Urgence Establishments (Paris & metropolitan area with dynamic distance calculation)
+export const EMERGENCY_FACILITIES_SEED: EmergencyFacility[] = [
+  {
+    id: 'fac-1',
+    name: 'Hôpital Pitié-Salpêtrière (AP-HP) — Service des Urgences',
+    type: 'urgence',
+    distanceKm: 1.2,
+    address: '47-83 Boulevard de l’Hôpital',
+    city: 'Paris 13e',
+    phone: '01 42 16 00 00',
+    isOpen24_7: true,
+    currentStatus: 'Ouvert 24h/24 — Urgences adultes & traumatologie',
+    lat: 48.8385,
+    lng: 2.3655,
+    services: ['Urgences vitales', 'Traumatologie', 'Plateau imagerie CT/IRM', 'Réanimation'],
+  },
+  {
+    id: 'fac-2',
+    name: 'Hôpital Saint-Antoine (AP-HP)',
+    type: 'hopital',
+    distanceKm: 1.8,
+    address: '184 Rue du Faubourg Saint-Antoine',
+    city: 'Paris 12e',
+    phone: '01 49 28 20 00',
+    isOpen24_7: true,
+    currentStatus: 'Ouvert 24h/24 — Urgences générales',
+    lat: 48.8499,
+    lng: 2.3846,
+    services: ['Médecine polyvalente', 'Chirurgie', 'Pôle digestif', 'Radiologie'],
+  },
+  {
+    id: 'fac-3',
+    name: 'Pharmacie Européenne de la Nation (Garde 24/7)',
+    type: 'pharmacie',
+    distanceKm: 0.6,
+    address: '13 Place de la Nation',
+    city: 'Paris 11e',
+    phone: '01 43 73 81 54',
+    isOpen24_7: true,
+    currentStatus: 'Ouvert 24h/24 — Garde de nuit continue',
+    lat: 48.8483,
+    lng: 2.3965,
+    services: ['Médicaments urgents', 'Oxygénothérapie', 'Délivrance ordonnances', 'Premiers secours'],
+  },
+  {
+    id: 'fac-4',
+    name: 'Centre de Santé Polyvalent OREA Bastille',
+    type: 'centre',
+    distanceKm: 1.4,
+    address: '22 Boulevard Richard-Lenoir',
+    city: 'Paris 11e',
+    phone: '01 48 05 12 34',
+    isOpen24_7: false,
+    currentStatus: 'Ouvert aujourd’hui : 08h00 - 20h00',
+    lat: 48.8546,
+    lng: 2.3701,
+    services: ['Médecine générale', 'Pédiatrie', 'Soins infirmiers', 'Prélèvements sanguins'],
+  },
+  {
+    id: 'fac-5',
+    name: 'Hôpital Necker-Enfants Malades — Urgences Pédiatriques',
+    type: 'urgence',
+    distanceKm: 3.4,
+    address: '149 Rue de Sèvres',
+    city: 'Paris 15e',
+    phone: '01 44 49 40 00',
+    isOpen24_7: true,
+    currentStatus: 'Ouvert 24h/24 — Urgences pédiatriques spécialisées',
+    lat: 48.8456,
+    lng: 2.3156,
+    services: ['Pédiatrie d’urgence', 'Chirurgie infantile', 'Centre antipoison', 'Urgences néonatales'],
+  },
+  {
+    id: 'fac-6',
+    name: 'Pharmacie Centrale de Garde de la République',
+    type: 'pharmacie',
+    distanceKm: 2.1,
+    address: '5 Place de la République',
+    city: 'Paris 3e',
+    phone: '01 47 00 18 08',
+    isOpen24_7: true,
+    currentStatus: 'Ouvert 24h/24 — Sans interruption',
+    lat: 48.8675,
+    lng: 2.3638,
+    services: ['Délivrance nuit & jour', 'Conseil pharmacien', 'Orthopédie', 'Tests rapides'],
+  },
+  {
+    id: 'fac-7',
+    name: 'Maison Médicale de Garde des Quinze-Vingts',
+    type: 'centre',
+    distanceKm: 1.5,
+    address: '28 Rue de Charenton',
+    city: 'Paris 12e',
+    phone: '01 40 02 15 15',
+    isOpen24_7: false,
+    currentStatus: 'Ouvert soirs de 20h à minuit & week-ends',
+    lat: 48.8512,
+    lng: 2.3725,
+    services: ['Consultations de garde sans RDV', 'Médecine générale', 'Petite traumatologie'],
+  },
+];
+
+// OREA Médicaments reliable database
+export const MEDICATIONS_DATABASE: MedicationInfo[] = [
+  {
+    id: 'med-1',
+    name: 'Paracétamol (Doliprane, Dafalgan, Efferalgan)',
+    genericName: 'Paracétamol',
+    form: 'Comprimé sécable, gélule, sachet, sirop',
+    dosage: '500 mg, 1 000 mg (1 g)',
+    generalUsage: 'Antalgique et antipyrétique de première intention destiné à soulager les douleurs d’intensité légère à modérée et/ou faire baisser la fièvre.',
+    indications: [
+      'Douleurs diverses (maux de tête, douleurs dentaires, courbatures, règles douloureuses)',
+      'États fébriles chez l’adulte et l’enfant',
+      'Douleurs articulaires légères',
+    ],
+    precautions: [
+      'Respecter impérativement la dose maximale : 1g par prise, espacée d’au moins 4 à 6 heures.',
+      'Ne jamais dépasser 3g par jour chez l’adulte sans avis médical explicite.',
+      'Contre-indiqué en cas d’insuffisance hépatique sévère.',
+      'Attention au risque de surdosage en associant plusieurs médicaments contenant du paracétamol.',
+    ],
+    sideEffects: [
+      'Rarement : réactions allergiques cutanées (érythème, urticaire)',
+      'En cas de surdosage : toxicité hépatique aiguë grave irréversible',
+    ],
+    interactions: [
+      'Anticoagulants oraux (surveillance accrue en cas d’usage prolongé)',
+      'Consommation importante d’alcool (augmente le risque de toxicité hépatique)',
+    ],
+    storage: 'À conserver à une température ne dépassant pas 30°C, à l’abri de l’humidité.',
+    prescriptionRequired: false,
+  },
+  {
+    id: 'med-2',
+    name: 'Ibuprofène (Advil, Nurofen, Antarène)',
+    genericName: 'Ibuprofène',
+    form: 'Comprimé pelliculé, capsule molle, suspension buvable',
+    dosage: '200 mg, 400 mg',
+    generalUsage: 'Anti-inflammatoire non stéroïdien (AINS) à visée antalgique, antipyrétique et anti-inflammatoire.',
+    indications: [
+      'Traitement de courte durée des douleurs aiguës (maux de tête, courbatures, douleurs dentaires)',
+      'Fièvre de courte durée',
+      'Affections rhumatologiques inflammatoires (sur prescription)',
+    ],
+    precautions: [
+      'Prendre impérativement au cours d’un repas pour protéger la muqueuse gastrique.',
+      'Contre-indiqué chez la femme enceinte dès le début du 6e mois de grossesse (contre-indication absolue).',
+      'Contre-indiqué en cas d’antécédent d’ulcère gastrique ou d’insuffisance rénale/cardiaque sévère.',
+      'Ne jamais associer à un autre anti-inflammatoire ou à l’aspirine.',
+    ],
+    sideEffects: [
+      'Troubles digestifs (brûlures d’estomac, nausées, gastrite)',
+      'Réactions allergiques cutanées ou respiratoires',
+      'Risque d’aggravation de certaines infections bactériennes',
+    ],
+    interactions: [
+      'Aspirine et autres AINS',
+      'Anticoagulants oraux et antiagrégants plaquettaires (majoration du risque hémorragique)',
+      'Antihypertenseurs (IEC, sartans) et diurétiques',
+    ],
+    storage: 'À conserver à température ambiante (15°C à 25°C).',
+    prescriptionRequired: false,
+  },
+  {
+    id: 'med-3',
+    name: 'Amoxicilline',
+    genericName: 'Amoxicilline trihydratée',
+    form: 'Gélule, comprimé dispersible, poudre pour suspension buvable',
+    dosage: '500 mg, 1 000 mg (1 g)',
+    generalUsage: 'Antibiotique de la famille des pénicillines (bêta-lactamines) actif contre de nombreuses bactéries sensibles.',
+    indications: [
+      'Infections respiratoires (otites moyennes aiguës, sinusites bactériennes, pneumopathies)',
+      'Angines bactériennes confirmées par test rapide (TDR)',
+      'Infections urinaires à germes sensibles',
+    ],
+    precautions: [
+      'Médicament soumis à prescription médicale obligatoire.',
+      'Contre-indiqué formellement en cas d’allergie connue aux pénicillines ou aux bêta-lactamines.',
+      'Respecter scrupuleusement la durée prescrite, même si les symptômes disparaissent avant.',
+      'Inutile et inefficace contre les infections virales (grippe, rhume, bronchite aiguë courante).',
+    ],
+    sideEffects: [
+      'Éruptions cutanées, démangeaisons',
+      'Troubles digestifs (diarrhée, nausées, inconfort abdominal)',
+      'Modification de la flore intestinale',
+    ],
+    interactions: [
+      'Méthotrexate (augmentation de la toxicité)',
+      'Allopurinol (majoration du risque d’éruption cutanée)',
+    ],
+    storage: 'Comprimés : température inférieure à 25°C. Sirop reconstitué : à conserver au réfrigérateur 7 à 14 jours selon la notice.',
+    prescriptionRequired: true,
+  },
+  {
+    id: 'med-4',
+    name: 'Oméprazole (Mopral, Zoltum)',
+    genericName: 'Oméprazole',
+    form: 'Gélule gastrorésistante',
+    dosage: '10 mg, 20 mg',
+    generalUsage: 'Inhibiteur de la pompe à protons (IPP) qui réduit puissamment la sécrétion acide de l’estomac.',
+    indications: [
+      'Reflux gastro-œsophagien (RGO) et œsophagite par reflux',
+      'Ulcère gastrique ou duodénal',
+      'Prévention des lésions gastriques induites par les anti-inflammatoires chez les patients à risque',
+    ],
+    precautions: [
+      'Prendre de préférence le matin à jeun avec un grand verre d’eau sans ouvrir ni croquer la gélule.',
+      'Ne pas utiliser de manière prolongée sans réévaluation médicale.',
+      'Un avis médical est requis en cas de perte de poids inexpliquée ou de difficulté à déglutir.',
+    ],
+    sideEffects: [
+      'Maux de tête, diarrhée ou constipation passagère, nausées',
+      'En usage au long cours : risque de carence en vitamine B12 ou en magnésium',
+    ],
+    interactions: [
+      'Clopidogrel (diminution possible de l’efficacité antiagrégante)',
+      'Certains antifongiques dont l’absorption dépend de l’acidité gastrique',
+    ],
+    storage: 'À conserver dans l’emballage d’origine à l’abri de la lumière et de l’humidité.',
+    prescriptionRequired: false, // 10mg over counter, 20mg usually Rx
+  },
+  {
+    id: 'med-5',
+    name: 'Cétirizine (Zyrtec, Alairgix)',
+    genericName: 'Dichlorhydrate de cétirizine',
+    form: 'Comprimé pelliculé sécable, gouttes buvables',
+    dosage: '10 mg',
+    generalUsage: 'Antihistaminique antiallergique H1 de deuxième génération soulageant les manifestations allergiques sans effet sédatif majeur.',
+    indications: [
+      'Rhinite allergique saisonnière (rhume des foins) et perannuelle',
+      'Conjonctivite allergique',
+      'Urticaire chronique idiopathique',
+    ],
+    precautions: [
+      'Prudence lors de la conduite automobile ou de l’utilisation de machines en raison d’un risque possible de somnolence chez certains sujets sensibles.',
+      'Éviter l’association avec des boissons alcoolisées.',
+      'Adapter la posologie en cas d’insuffisance rénale modérée à sévère.',
+    ],
+    sideEffects: [
+      'Légère somnolence ou fatigue diurne',
+      'Bouche sèche, céphalées, étourdissements',
+    ],
+    interactions: [
+      'Dépresseurs du système nerveux central et alcool (potentialisation de la somnolence)',
+    ],
+    storage: 'À conserver à une température ambiante.',
+    prescriptionRequired: false,
+  },
+  {
+    id: 'med-6',
+    name: 'Phloroglucinol (Spasfon)',
+    genericName: 'Phloroglucinol / Triméthylphloroglucinol',
+    form: 'Comprimé enrobé, lyophilisat oral (Spasfon Lyoc)',
+    dosage: '80 mg',
+    generalUsage: 'Antispasmodique musculotrope qui lève les spasmes douloureux des muscles lisses digestifs, urinaires et gynécologiques.',
+    indications: [
+      'Douleurs spasmodiques de l’intestin (colite, syndrome de l’intestin irritable)',
+      'Douleurs des voies biliaires',
+      'Coliques néphrétiques (en traitement d’appoint)',
+      'Douleurs spasmodiques gynécologiques (règles douloureuses)',
+    ],
+    precautions: [
+      'Ne traite pas la cause de la douleur, seulement le spasme musculaire.',
+      'En cas de douleur abdominale aiguë inexpliquée et intense, consulter sans délai.',
+    ],
+    sideEffects: [
+      'Très rares éruptions cutanées, urticaire ou réactions allergiques exceptionnelles',
+    ],
+    interactions: [
+      'Pas d’interaction médicamenteuse majeure connue à ce jour.',
+    ],
+    storage: 'À conserver à l’abri de la chaleur et de l’humidité.',
+    prescriptionRequired: false,
+  },
+];
+
+// Sample default medication reminders for localStorage initial state
+export const DEFAULT_MEDICATION_REMINDERS: MedicationReminder[] = [
+  {
+    id: 'rem-1',
+    medicationName: 'Oméprazole',
+    dosage: '20 mg — 1 gélule',
+    time: '08:00',
+    frequency: 'daily',
+    notes: 'À prendre à jeun avec un grand verre d’eau',
+    notificationEnabled: true,
+    takenToday: true,
+    createdAt: '2026-09-01T08:00:00Z',
+  },
+  {
+    id: 'rem-2',
+    medicationName: 'Cétirizine',
+    dosage: '10 mg — 1 comprimé',
+    time: '20:30',
+    frequency: 'daily',
+    notes: 'Traitement de la rhinite allergique saisonnière',
+    notificationEnabled: true,
+    takenToday: false,
+    createdAt: '2026-09-02T20:30:00Z',
+  },
+];
+
+// Sample default agenda events for localStorage initial state
+export const DEFAULT_AGENDA_EVENTS: AgendaEvent[] = [
+  {
+    id: 'evt-1',
+    type: 'rdv',
+    title: 'Consultation annuelle de synthèse',
+    date: '2026-09-12',
+    time: '10:30',
+    location: 'Centre Médical OREA Bastille',
+    practitioner: 'Dr. Claire Delmas (Médecin généraliste)',
+    notes: 'Apporter les résultats de la dernière prise de sang et le carnet de tension.',
+    reminderNotice: '24h',
+    completed: false,
+  },
+  {
+    id: 'evt-2',
+    type: 'examen',
+    title: 'Bilan sanguin & lipidique à jeun',
+    date: '2026-09-18',
+    time: '08:15',
+    location: 'Laboratoire de Biologie Médicale Nation',
+    practitioner: 'Laboratoire BioSanté',
+    notes: 'Être à jeun depuis 12 heures (eau plate autorisée).',
+    reminderNotice: '24h',
+    completed: false,
+  },
+  {
+    id: 'evt-3',
+    type: 'vaccination',
+    title: 'Rappel DTP & Coqueluche',
+    date: '2026-09-25',
+    time: '14:00',
+    location: 'Cabinet Médical Gambetta',
+    practitioner: 'Dr. Marc Laurent',
+    notes: 'Acheter le vaccin en pharmacie 24h avant et conserver au réfrigérateur.',
+    reminderNotice: '48h',
+    completed: false,
+  },
+  {
+    id: 'evt-4',
+    type: 'suivi',
+    title: 'Contrôle tensionnel chez le cardiologue',
+    date: '2026-10-05',
+    time: '16:00',
+    location: 'Clinique Cardiovasculaire Paris Est',
+    practitioner: 'Dr. Sophie Bernard',
+    notes: 'Relevé des 7 jours d’automesure tensionnelle.',
+    reminderNotice: '24h',
+    completed: false,
+  },
+];
+
+// ====================================================
+// NUTRITION: ALIMENTS AFRICAINS & LOCAUX VALORISÉS
+// ====================================================
+export const AFRICAN_SUPERFOODS = [
+  {
+    id: 'food-safou',
+    name: 'Safou (Prune d\'Afrique)',
+    localNames: ['Safou', 'Atanga', 'Nsafu'],
+    region: 'Afrique Centrale & Congo',
+    category: 'fruit' as const,
+    nutritionalBenefits: [
+      'Riche en acides gras essentiels protecteurs du cœur (omégas 6 et 9)',
+      'Excellente source de vitamine C et de vitamine E antioxydantes',
+      'Minéraux protecteurs : potassium, calcium et magnésium',
+    ],
+    culinaryUsage: 'Cuit à l\'eau frémissante ou grillé avec un peu de sel, souvent dégusté avec du maïs ou du manioc.',
+  },
+  {
+    id: 'food-manioc',
+    name: 'Manioc & Feuilles de Manioc (Saka-Saka / Pondu)',
+    localNames: ['Saka-saka', 'Pondu', 'Feuilles de manioc'],
+    region: 'Bassin du Congo & Afrique Centrale',
+    category: 'legume' as const,
+    nutritionalBenefits: [
+      'Très forte teneur en fer d\'origine végétale et vitamine A',
+      'Riche en fibres favorisant un transit régulier et le microbiote',
+      'Source durable d\'énergie sans index glycémique brutal',
+    ],
+    culinaryUsage: 'Feuilles pilées mijotées à feu doux avec de l\'huile de palme rouge ou pâte d\'arachide, poisson fumé ou légumes.',
+  },
+  {
+    id: 'food-moringa',
+    name: 'Moringa Oleifera (Arbre de Vie)',
+    localNames: ['Moringa', 'Nebedaye'],
+    region: 'Afrique de l\'Ouest & Centrale',
+    category: 'legume' as const,
+    nutritionalBenefits: [
+      'Concentré remarquable de protéines végétales complètes',
+      '4 fois plus de calcium que le lait, 3 fois plus de potassium que la banane',
+      'Puissant antioxydant anti-inflammatoire naturel',
+    ],
+    culinaryUsage: 'En poudre ajoutée aux smoothies, sauces, porridges ou infusions tièdes.',
+  },
+  {
+    id: 'food-patate-douce',
+    name: 'Patate Douce Orange',
+    localNames: ['Mbala ya sukali', 'Patate douce'],
+    region: 'Afrique Subsaharienne',
+    category: 'feculent' as const,
+    nutritionalBenefits: [
+      'Exceptionnelle source de bêta-carotène (vitamine A)',
+      'Glucides complexes à diffusion lente parfaits pour l\'activité physique',
+      'Soutien naturel du système immunitaire et de la vision',
+    ],
+    culinaryUsage: 'Bouillie, rôtie au four ou en purée légère parfumée à la muscade.',
+  },
+  {
+    id: 'food-bissap',
+    name: 'Fleurs d\'Hibiscus (Bissap / Foléré)',
+    localNames: ['Bissap', 'Foléré', 'Karkadé'],
+    region: 'Afrique de l\'Ouest & Centrale',
+    category: 'graine_epice' as const,
+    nutritionalBenefits: [
+      'Régulateur naturel reconnu de la tension artérielle légère',
+      'Riche en polyphénols antioxydants et vitamine C',
+      'Hydratation stimulante et drainante pour l\'organisme',
+    ],
+    culinaryUsage: 'Infusion fraîche ou chaude avec menthe fraîche, sans sucre raffiné ajouté.',
+  },
+  {
+    id: 'food-gombo',
+    name: 'Gombo (Okra)',
+    localNames: ['Dongo-dongo', 'Gombo', 'Okra'],
+    region: 'Afrique Centrale & Ouest',
+    category: 'legume' as const,
+    nutritionalBenefits: [
+      'Mucilages naturels bienfaisants pour la paroi de l\'estomac et du côlon',
+      'Régulation de l\'absorption intestinale du glucose',
+      'Riche en acide folique (vitamine B9) idéal pour la santé féminine',
+    ],
+    culinaryUsage: 'En sauce dongo-dongo onctueuse, grillé avec un filet d\'huile ou vapeur.',
+  },
+];
+
+// ====================================================
+// SPORT & WORKOUT: PROGRAMMES & EXERCICES
+// ====================================================
+export const OREA_WORKOUT_PROGRAMS = [
+  {
+    id: 'prog-starter',
+    title: 'Programme Débutant : Réveil & Vitalité',
+    level: 'debutant' as const,
+    durationDays: 7 as const,
+    goal: 'remise_en_forme' as const,
+    description: 'Une reprise progressive en douceur pour réveiller les articulations, tonifier le corps sans choc et reprendre confiance.',
+    exercises: [
+      {
+        id: 'ex-squat',
+        name: 'Squats au poids du corps',
+        targetMuscles: ['Quadriceps', 'Fessiers', 'Mollets'],
+        sets: 3,
+        reps: '12 répétitions',
+        restSec: 45,
+        instructions: 'Pieds écartés à la largeur des épaules. Descendez les fessiers vers l\'arrière en gardant le dos droit et la poitrine fière.',
+        breathAdvice: 'Inspirez à la descente, soufflez fermement en remontant.',
+        commonMistakes: 'Décoller les talons du sol ou rentrer les genoux vers l\'intérieur.',
+      },
+      {
+        id: 'ex-pompes-murales',
+        name: 'Pompes inclinées ou contre le mur',
+        targetMuscles: ['Pectoraux', 'Triceps', 'Épaules'],
+        sets: 3,
+        reps: '10 répétitions',
+        restSec: 45,
+        instructions: 'Mains posées à plat contre une table stable ou un mur. Fléchissez les coudes à 45 degrés puis repoussez fermement.',
+        breathAdvice: 'Inspirez en vous rapprochant du mur, soufflez en poussant.',
+        commonMistakes: 'Creuser le bas du dos ou lever excessivement les coudes.',
+      },
+      {
+        id: 'ex-gainage',
+        name: 'Gainage ventral (Planche)',
+        targetMuscles: ['Abdominaux profonds', 'Lombaires', 'Stabilité'],
+        sets: 3,
+        durationSec: 30,
+        restSec: 60,
+        instructions: 'En appui sur les avant-bras et la pointe des pieds. Maintenez le corps droit comme une planche sans cambrer.',
+        breathAdvice: 'Respirez calmement par le nez et soufflez par la bouche de manière continue.',
+        commonMistakes: 'Laisser tomber le bassin vers le sol ou lever les fesses trop haut.',
+      },
+      {
+        id: 'ex-fentes',
+        name: 'Fentes alternées lentes',
+        targetMuscles: ['Fessiers', 'Ischio-jambiers', 'Équilibre'],
+        sets: 3,
+        reps: '10 par jambe',
+        restSec: 45,
+        instructions: 'Faites un pas vers l\'avant, fléchissez le genou arrière vers le sol à angle droit en maintenant le torse bien droit.',
+        breathAdvice: 'Inspirez en descendant, expirez en repoussant pour revenir.',
+        commonMistakes: 'Le genou avant qui dépasse excessivement la pointe du pied.',
+      },
+    ],
+  },
+  {
+    id: 'prog-30d',
+    title: 'Programme 30 Jours : Force & Tonus Musculaire',
+    level: 'intermediaire' as const,
+    durationDays: 30 as const,
+    goal: 'force' as const,
+    description: 'Structure complète sur 4 semaines pour développer l\'endurance musculaire, le souffle et la fermeté corporelle.',
+    exercises: [
+      {
+        id: 'ex-pompes-sol',
+        name: 'Pompes au sol complètes',
+        targetMuscles: ['Pectoraux', 'Triceps', 'Deltoïdes'],
+        sets: 4,
+        reps: '12 à 15 répétitions',
+        restSec: 60,
+        instructions: 'Corps en ligne parfaite des talons aux épaules. Poitrine descendant frôler le sol.',
+        breathAdvice: 'Inspiration contrôlée en bas, expiration explosive en poussant.',
+        commonMistakes: 'Relâcher la sangle abdominale pendant l\'effort.',
+      },
+      {
+        id: 'ex-burpees',
+        name: 'Burpees OREA sans saut violent',
+        targetMuscles: ['Full Body', 'Cœur', 'Explosivité'],
+        sets: 3,
+        reps: '10 répétitions',
+        restSec: 60,
+        instructions: 'Descendez en squat, posez les mains, jetez les jambes en planche, ramenez les pieds et redressez-vous.',
+        breathAdvice: 'Soufflez fort à la remontée.',
+        commonMistakes: 'Arrondir le dos en ramassant les pieds.',
+      },
+    ],
+  },
+  {
+    id: 'prog-elite',
+    title: 'Programme OREA Elite : 90 Jours Athlète',
+    level: 'elite' as const,
+    durationDays: 90 as const,
+    goal: 'full_body' as const,
+    description: 'Le summum de l\'endurance, de la force au poids de corps et de l\'agilité mentale pour les pratiquants chevronnés.',
+    exercises: [
+      {
+        id: 'ex-pistol',
+        name: 'Squat sur une jambe (Pistol Squat assisté)',
+        targetMuscles: ['Quadriceps', 'Ischio-jambiers', 'Fessiers'],
+        sets: 4,
+        reps: '8 par jambe',
+        restSec: 75,
+        instructions: 'Descendez sur une jambe tendue devant vous en maintenant le torse vertical.',
+        breathAdvice: 'Concentration respiratoire profonde.',
+        commonMistakes: 'Perdre l\'appui du talon au sol.',
+      },
+    ],
+  },
+];
+
+// ====================================================
+// EDUCATION: PARCOURS BAC G2 & COMPÉTENCES
+// ====================================================
+export const OREA_EDUCATION_SUBJECTS = [
+  {
+    id: 'bac-g2-gestion',
+    code: 'GEST-201',
+    title: 'Gestion & Économie d\'Entreprise (BAC G2)',
+    category: 'bac_g2' as const,
+    coefficient: 5,
+    description: 'Structure des organisations, management financier, analyse de marché et prise de décision en entreprise africaine.',
+    summary: 'Structure des organisations, management financier, analyse de marché et prise de décision en entreprise africaine.',
+    lessonsCount: 6,
+    quizzesCount: 6,
+    lessons: [
+      '1. Typologie et formes juridiques des entreprises en zone OHADA',
+      '2. Organisation interne, fonctions clés et organigrammes',
+      '3. Analyse de marché, marketing mix et stratégie commerciale',
+      '4. Diagnostic financier : FRNG, BFR et Trésorerie Nette',
+      '5. Gestion des ressources humaines et droit du travail congolais',
+      '6. Prise de décision, investissement et calcul du seuil de rentabilité',
+    ],
+  },
+  {
+    id: 'bac-g2-compta',
+    code: 'CPTA-301',
+    title: 'Comptabilité Générale & SYSCOHADA',
+    category: 'comptabilite' as const,
+    coefficient: 6,
+    description: 'Plan comptable OHADA révisé, écritures d\'inventaire, bilan, compte de résultat et calcul des amortissements.',
+    summary: 'Plan comptable OHADA, écritures d\'inventaire, bilan, compte de résultat et calcul des amortissements.',
+    lessonsCount: 6,
+    quizzesCount: 8,
+    lessons: [
+      '1. Cadre conceptuel du Système Comptable OHADA Révisé',
+      '2. Opérations courantes : Achats, Ventes, Facturation & TVA',
+      '3. Règlements par Mobile Money, chèques, traites et effets de commerce',
+      '4. Travaux de fin d\'exercice : Amortissements linéaires et dégressifs',
+      '5. Dépréciations des stocks, créances clients et provisions pour risques',
+      '6. Établissement des états financiers annuels : Bilan, Compte de Résultat, TFT',
+    ],
+  },
+  {
+    id: 'bac-mathematiques',
+    code: 'MATH-102',
+    title: 'Mathématiques Appliquées & Statistiques',
+    category: 'mathematiques' as const,
+    coefficient: 4,
+    description: 'Calculs de probabilités, suites financières, intérêts composés, annuités et analyse de données chiffrées.',
+    summary: 'Calculs de probabilités, suites financières, intérêts composés et analyse de données chiffrées.',
+    lessonsCount: 5,
+    quizzesCount: 5,
+    lessons: [
+      '1. Suites arithmétiques et géométriques appliquées à la finance',
+      '2. Intérêts simples, escompte commercial et taux effectif global',
+      '3. Intérêts composés et calcul de la valeur future d\'un capital',
+      '4. Annuités constantes, amortissement des emprunts indivis',
+      '5. Statistiques descriptives à deux variables et régression linéaire',
+    ],
+  },
+  {
+    id: 'francais-eloquence',
+    code: 'FRAN-101',
+    title: 'Français, Synthèse & Prise de Parole',
+    category: 'francais' as const,
+    coefficient: 3,
+    description: 'Techniques de dissertation, analyse de texte, argumentation structurée et éloquence pour réussir les épreuves écrites et orales.',
+    summary: 'Techniques de dissertation, analyse de texte, argumentation structurée et éloquence pour réussir l\'oral.',
+    lessonsCount: 4,
+    quizzesCount: 4,
+    lessons: [
+      '1. Méthodologie rigoureuse de la dissertation littéraire et philosophique',
+      '2. Technique du résumé de texte et contraction de texte moderne',
+      '3. Construction d\'une argumentation convaincante et réfutation',
+      '4. Art oratoire, gestion du trac et posture lors des oraux d\'examen',
+    ],
+  },
+];
+
+export const BAC_G2_SAMPLE_QUIZ = [
+  {
+    id: 'q1',
+    subjectId: 'bac-g2-compta',
+    question: 'Dans le système comptable SYSCOHADA révisé, quelle classe regroupe les comptes d\'actif immobilisé ?',
+    options: [
+      'Classe 1 : Ressources durables',
+      'Classe 2 : Comptes d\'actif immobilisé',
+      'Classe 3 : Comptes de stocks',
+      'Classe 4 : Comptes de tiers',
+    ],
+    correctIndex: 1,
+    explanation: 'La Classe 2 regroupe l\'ensemble des immobilisations incorporelles, corporelles et financières destinées à servir durablement.',
+  },
+  {
+    id: 'q2',
+    subjectId: 'bac-g2-compta',
+    question: 'Que traduit un résultat net d\'exercice négatif (perte) au bilan ?',
+    options: [
+      'Une diminution des capitaux propres de l\'entreprise',
+      'Une augmentation immédiate de la trésorerie',
+      'Un crédit bancaire obligatoire',
+      'Une hausse des dettes fournisseurs',
+    ],
+    correctIndex: 0,
+    explanation: 'La perte vient imputer et réduire directement le montant net des capitaux propres (Classe 1) au passif du bilan.',
+  },
+  {
+    id: 'q3',
+    subjectId: 'bac-g2-gestion',
+    question: 'Quelle est la fonction principale d\'un seuil de rentabilité (point mort) ?',
+    options: [
+      'Déterminer le chiffre d\'affaires minimum à partir duquel l\'activité commence à générer un bénéfice',
+      'Calculer les impôts dus à l\'État congolais',
+      'Fixer le salaire des stagiaires',
+      'Choisir l\'emplacement géographique du siège social',
+    ],
+    correctIndex: 0,
+    explanation: 'Le seuil de rentabilité correspond au niveau de chiffre d\'affaires pour lequel le résultat est exactement nul (ni gain ni perte).',
+  },
+];
+
+// ====================================================
+// PLANNER: JOURNÉE OREA 07:00 -> 21:00
+// ====================================================
+export const DEFAULT_PLANNER_BLOCKS = [
+  {
+    id: 'plan-1',
+    timeSlot: '07:00',
+    domain: 'routine' as const,
+    title: 'Routine Matinale & Hydratation',
+    durationMinutes: 30,
+    isPriority: true,
+    completed: true,
+  },
+  {
+    id: 'plan-2',
+    timeSlot: '10:00',
+    domain: 'apprentissage' as const,
+    title: 'Session Éducation : BAC G2 & Comptabilité',
+    durationMinutes: 60,
+    isPriority: true,
+    completed: false,
+  },
+  {
+    id: 'plan-3',
+    timeSlot: '13:00',
+    domain: 'nutrition' as const,
+    title: 'Déjeuner Équilibré : Saka-Saka & Poisson braisé',
+    durationMinutes: 45,
+    isPriority: false,
+    completed: false,
+  },
+  {
+    id: 'plan-4',
+    timeSlot: '17:00',
+    domain: 'sport' as const,
+    title: 'Séance Sport OREA : 30 min Tonus & Mobilité',
+    durationMinutes: 30,
+    isPriority: true,
+    completed: false,
+  },
+  {
+    id: 'plan-5',
+    timeSlot: '21:00',
+    domain: 'bilan' as const,
+    title: 'Bilan de la journée & Préparation au Sommeil',
+    durationMinutes: 20,
+    isPriority: false,
+    completed: false,
+  },
+];
+
+// ====================================================
+// FINANCE EN FCFA & BUSINESS
+// ====================================================
+export const DEFAULT_BUDGET_CATEGORIES = [
+  { id: 'b-logement', name: 'Loyer & Énergie', allocatedFcfa: 120000, spentFcfa: 120000, iconName: 'Home' },
+  { id: 'b-alimentation', name: 'Marché & Alimentation', allocatedFcfa: 90000, spentFcfa: 68500, iconName: 'ShoppingBag' },
+  { id: 'b-transport', name: 'Transport & Carburant', allocatedFcfa: 40000, spentFcfa: 31000, iconName: 'Truck' },
+  { id: 'b-sante', name: 'Santé & Prévention OREA', allocatedFcfa: 25000, spentFcfa: 8000, iconName: 'HeartPulse' },
+  { id: 'b-epargne', name: 'Épargne Projet', allocatedFcfa: 50000, spentFcfa: 50000, iconName: 'PiggyBank' },
+];
+
+// ====================================================
+// ÉTABLISSEMENTS DE SANTÉ RÉELS VÉRIFIÉS (CONGO & RÉGION)
+// ====================================================
+export const EMERGENCY_FACILITIES_AFRICA = [
+  {
+    id: 'fac-chu-bzv',
+    name: 'Centre Hospitalier et Universitaire (CHU) de Brazzaville',
+    type: 'hopital' as const,
+    distanceKm: 2.1,
+    address: 'Boulevard du Maréchal Lyautey, Centre-Ville, Brazzaville',
+    city: 'Brazzaville, République du Congo',
+    phone: '+242 06 669 35 35',
+    isOpen24_7: true,
+    currentStatus: 'Urgences médicales et chirurgicales ouvertes 24h/24',
+    lat: -4.2634,
+    lng: 15.2832,
+    services: ['Urgences générales', 'Traumatologie', 'Maternité', 'Pédiatrie', 'Laboratoire central', 'Imagerie scanner'],
+  },
+  {
+    id: 'fac-militaire-bzv',
+    name: 'Hôpital Central des Armées Pierre Mobengo',
+    type: 'hopital' as const,
+    distanceKm: 3.4,
+    address: 'Avenue de la Paix, Poto-Poto, Brazzaville',
+    city: 'Brazzaville, République du Congo',
+    phone: '+242 05 521 14 00',
+    isOpen24_7: true,
+    currentStatus: 'Service d\'accueil des urgences 24h/24',
+    lat: -4.2541,
+    lng: 15.2721,
+    services: ['Urgences chirurgicales', 'Cardiologie', 'Réanimation', 'Pharmacie hospitalière'],
+  },
+  {
+    id: 'fac-loandjili-pnr',
+    name: 'Hôpital Général de Loandjili',
+    type: 'hopital' as const,
+    distanceKm: 4.8,
+    address: 'Quartier Loandjili, Arrondissement 4, Pointe-Noire',
+    city: 'Pointe-Noire, République du Congo',
+    phone: '+242 05 554 22 10',
+    isOpen24_7: true,
+    currentStatus: 'Pôle d\'urgence majeur Pointe-Noire ouvert 24h/24',
+    lat: -4.7589,
+    lng: 11.8845,
+    services: ['Urgences polyvalentes', 'Banque de sang', 'Maternité', 'Bloc opératoire'],
+  },
+  {
+    id: 'fac-pharma-nationale',
+    name: 'Pharmacie Centrale de Garde de Brazzaville',
+    type: 'pharmacie' as const,
+    distanceKm: 1.2,
+    address: 'Avenue Amilcar Cabral, Plateau, Brazzaville',
+    city: 'Brazzaville, République du Congo',
+    phone: '+242 06 661 22 80',
+    isOpen24_7: true,
+    currentStatus: 'Ouverte de nuit & jours fériés',
+    lat: -4.2689,
+    lng: 15.2891,
+    services: ['Médicaments d\'urgence', 'Tension artérielle', 'Premiers secours'],
+  },
+  {
+    id: 'fac-samu-congo',
+    name: 'SAMU National & Pompiers Congo (Secours)',
+    type: 'urgence' as const,
+    distanceKm: 0.1,
+    address: 'Couverture nationale Brazzaville / Pointe-Noire',
+    city: 'Congo',
+    phone: '112 / 118',
+    isOpen24_7: true,
+    currentStatus: 'Numéro d\'urgence national accessible 24h/24',
+    lat: -4.2634,
+    lng: 15.2832,
+    services: ['Ambulances médicalisées', 'Intervention d\'urgence', 'Régulation médicale'],
+  },
+];
+

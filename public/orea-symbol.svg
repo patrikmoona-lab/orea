@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Outer Blue-to-Cyan Crescent Gradient -->
+    <linearGradient id="symCircGrad" x1="80" y1="360" x2="320" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B3B75" />
+      <stop offset="30%" stop-color="#075FA8" />
+      <stop offset="65%" stop-color="#0077B6" />
+      <stop offset="90%" stop-color="#00A6C7" />
+      <stop offset="100%" stop-color="#00C49F" />
+    </linearGradient>
+
+    <!-- Gloss Highlight Gradient -->
+    <linearGradient id="symGloss" x1="100" y1="120" x2="260" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Human Figure Gradient -->
+    <linearGradient id="symFigGrad" x1="160" y1="110" x2="220" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00A6C7" />
+      <stop offset="35%" stop-color="#0077B6" />
+      <stop offset="100%" stop-color="#075FA8" />
+    </linearGradient>
+
+    <!-- Emerald Leaf Gradient -->
+    <linearGradient id="symLeafGrad" x1="200" y1="360" x2="340" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#007F8C" />
+      <stop offset="25%" stop-color="#00A6A6" />
+      <stop offset="65%" stop-color="#2BB673" />
+      <stop offset="100%" stop-color="#63C96B" />
+    </linearGradient>
+
+    <!-- Golden Sparkle Stars Gradient -->
+    <linearGradient id="symGoldGrad" x1="290" y1="70" x2="340" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="50%" stop-color="#F4B400" />
+      <stop offset="100%" stop-color="#E29200" />
+    </linearGradient>
+  </defs>
+
+  <!-- Group translated to center on 400x400 -->
+  <g transform="translate(-100, -10)">
+    <!-- Blue to Cyan Crescent (Letter O shape) -->
+    <path
+      d="M 270 365
+         C 185 365 120 300 120 215
+         C 120 125 195 60 300 60
+         C 355 60 395 82 418 105
+         C 405 112 388 108 358 98
+         C 318 84 262 90 220 126
+         C 176 162 168 218 192 270
+         C 215 315 260 332 308 332
+         C 324 332 332 342 320 352
+         C 305 364 288 365 270 365 Z"
+      fill="url(#symCircGrad)"
+    />
+
+    <!-- Gloss Reflection Arc on Upper Left -->
+    <path
+      d="M 165 145
+         C 198 90 255 70 325 68
+         C 292 64 238 70 196 102
+         C 158 132 145 174 150 218
+         C 150 188 155 164 165 145 Z"
+      fill="url(#symGloss)"
+    />
+
+    <!-- Human Figure: Head -->
+    <circle cx="305" cy="125" r="23" fill="url(#symFigGrad)" />
+
+    <!-- Human Figure: Body & Upraised Arms -->
+    <path
+      d="M 242 120
+         C 260 140 282 166 295 188
+         C 292 222 278 248 268 270
+         C 285 252 308 214 315 188
+         C 332 162 356 132 376 96
+         C 360 116 340 144 324 158
+         C 316 138 308 122 300 110
+         C 288 126 272 138 242 120 Z"
+      fill="url(#symFigGrad)"
+    />
+
+    <!-- Green Health Leaf -->
+    <path
+      d="M 308 332
+         C 345 326 385 296 410 252
+         C 430 216 435 168 422 132
+         C 412 174 390 220 356 254
+         C 330 280 312 305 308 332 Z"
+      fill="url(#symLeafGrad)"
+    />
+
+    <!-- Crisp White Leaf Central Vein -->
+    <path
+      d="M 324 312
+         C 350 282 378 244 398 202
+         C 408 184 414 164 418 144"
+      stroke="#FFFFFF"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      stroke-opacity="0.92"
+    />
+
+    <!-- Brilliant 4-Pointed Golden Star at Top Right -->
+    <path
+      d="M 424 74
+         C 424 88 431 98 446 98
+         C 431 98 424 108 424 122
+         C 424 108 417 98 402 98
+         C 417 98 424 88 424 74 Z"
+      fill="url(#symGoldGrad)"
+    />
+
+    <!-- Secondary micro-sparkle -->
+    <path
+      d="M 448 118
+         C 448 125 452 130 460 130
+         C 452 130 448 135 448 142
+         C 448 135 444 130 436 130
+         C 444 130 448 125 448 118 Z"
+      fill="url(#symGoldGrad)"
+      opacity="0.85"
+    />
+  </g>
+</svg>

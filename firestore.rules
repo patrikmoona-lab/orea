@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'patrik.moona@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Test de connectivité
+    match /test/{testId} {
+      allow read: if true;
+    }
+
+    // Profil et sous-collections privées utilisateur
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+
+      match /{allSubcollections=**} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // Admins autorisés
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Conversations d'assistance OREA racine
+    match /assistantConversations/{conversationId} {
+      allow read, write: if isSignedIn() && (
+        resource == null || resource.data.userId == request.auth.uid || isAdmin()
+      ) && (
+        request.resource == null || request.resource.data.userId == request.auth.uid || isAdmin()
+      );
+
+      match /messages/{messageId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+
+    // Préférences d'assistance
+    match /assistantPreferences/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    // Transactions et paiements OREA
+    match /payments/{paymentId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isSignedIn() && (
+        (resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid) ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Conseils et contenus pédagogiques OREA
+    match /content/tips/items/{tipId} {
+      allow read: if resource.data.status == 'publie' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Vidéos YouTube pédagogiques OREA
+    match /content/videos/items/{videoId} {
+      allow read: if resource.data.status == 'publie' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Catégories OREA
+    match /content/categories/items/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Statistiques et logs de consultation
+    match /content/stats/{statId} {
+      allow read: if isSignedIn() || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /content/consultations/logs/{logId} {
+      allow create: if isSignedIn() || isAdmin();
+      allow read, write: if isAdmin();
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
